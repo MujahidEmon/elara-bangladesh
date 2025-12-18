@@ -1,14 +1,20 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
 
     const user = null;
+    const navItems = [
+        { name: "Home", path: "/" },
+        { name: "All Products", path: "/allProducts" },
+        { name: "Contact Us", path: "/contact" }
+    ]
 
     return (
-        <div className="navbar sticky top-0 z-50 backdrop-blur-md bg-black/70 shadow-md">
-            <div className="navbar-start">
+        <div className="navbar md:px-8 sticky top-0 z-50 transition-shadow duration-300 ease-in-out shadow-md  bg-[#fffefe]">
+            <div className="navbar-start ">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
@@ -18,62 +24,74 @@ const Navbar = () => {
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
                         <li>
-                            <Link className={({ isActive }) =>
-                                isActive
-                                    ? " text-white font-semibold px-4 py-2 bg-[#FCAB35]"
-                                    : " text-white px-4 py-2 hover:text-[#FCAB35] transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300"}
+                            <Link 
+                            className={`text-black px-4 py-2 transition duration-300 relative
+                                    ${usePathname() === '/'
+                                    ? 'font-semibold bg-[#FCAB35]'
+                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                }`}
                                 href={'/'}>Home</Link>
                         </li>
                         <li>
-                            <Link className={({ isActive }) =>
-                                isActive
-                                    ? " text-white font-semibold px-4 py-2 bg-[#FCAB35]"
-                                    : " text-white px-4 py-2 hover:text-[#FCAB35] transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300"}
+                            <Link
+                            className={`text-black px-4 py-2 transition duration-300 relative
+                                    ${usePathname() === '/allProducts'
+                                    ? 'font-semibold bg-[#FCAB35]'
+                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                }`}
                                 href={'/allProducts'}>All Products</Link>
                         </li>
                         <li>
-                            <Link className={({ isActive }) =>
-                                isActive
-                                    ? " text-white font-semibold px-4 py-2 bg-[#FCAB35]"
-                                    : " text-white px-4 py-2 hover:text-[#FCAB35] transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300"}
-                                href={'/contact'}>Contact Us</Link>
+                            <Link 
+                        className={`text-black px-4 py-2 transition duration-300 relative
+                                    ${usePathname() === '/contact'
+                                    ? 'font-semibold bg-[#FCAB35]'
+                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                }`}
+                            href={'/contact'}>Contact Us</Link>
                         </li>
                     </ul>
                 </div>
-                <Link href={'/'} className=" bg-transparent border-0 ml-0 pl-0 md:pl-auto md:text-2xl text-white font-semibold"><span className="text-[#FCAB35]">Elara</span> International</Link>
+                <Link href={'/'} className=" bg-transparent border-0 ml-0 pl-0 md:pl-auto md:text-2xl text-black font-semibold"><span className="text-[#FCAB35]">Elara</span> Bangladesh</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul
                     className="menu menu-horizontal px-1"
                 >
                     <li>
-                        <Link className={({ isActive }) =>
-                            isActive
-                                ? " text-white font-semibold px-4 py-2 bg-[#FCAB35]"
-                                : " text-white px-4 py-2 hover:text-[#FCAB35] transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300"
-                        }
+                        <Link 
+                        className={`text-black px-4 py-2 transition duration-300 relative
+                                    ${usePathname() === '/'
+                                    ? 'font-semibold bg-[#FCAB35]'
+                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                }`}
                             href={'/'}>Home</Link>
                     </li>
                     <li>
-                        <Link className={({ isActive }) =>
-                            isActive
-                                ? " text-white font-semibold px-4 py-2 bg-[#FCAB35]"
-                                : " text-white px-4 py-2 hover:text-[#FCAB35] transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300"
-                        }
+                        <Link
+                            className={`text-black px-4 py-2 transition duration-300 relative
+                                    ${usePathname() === '/allProducts'
+                                    ? 'font-semibold bg-[#FCAB35]'
+                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                }`}
                             href={'/allProducts'}>All Products</Link>
                     </li>
                     <li>
-                        <Link className={({ isActive }) =>
-                            isActive
-                                ? " text-white font-semibold px-4 py-2 bg-[#FCAB35]"
-                                : " text-white px-4 py-2 hover:text-[#FCAB35] transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300"
-                        }
+                        <Link 
+                        className={`text-black px-4 py-2 transition duration-300 relative
+                                    ${usePathname() === '/contact'
+                                    ? 'font-semibold bg-[#FCAB35]'
+                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                }`}
                             href={'/contact'}>Contact Us</Link>
                     </li>
                 </ul>
             </div>
             <div className="navbar-end">
                 <div className="dropdown dropdown-end">
+                    <div>
+
+                    </div>
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                         <div className="indicator ">
                             <svg

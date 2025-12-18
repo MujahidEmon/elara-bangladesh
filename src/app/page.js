@@ -1,9 +1,8 @@
 import Homepage from "@/components/homepage/Homepage";
-import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex min-h-screen items-center justify-center  font-sans bg-[#fffefe]">
       <main>
         <Homepage></Homepage>
       </main>

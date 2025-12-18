@@ -14,9 +14,11 @@ const Footer = () => {
                     <div className="space-y-6">
                         <Link href="/" className="inline-block">
                             <Image
-                                href={elogo}
+                                src={elogo}
                                 alt="Elara International"
-                                className="h-40 w-auto transition-opacity hover:opacity-90"
+                                className=" w-auto transition-opacity hover:opacity-90"
+                                height={80}
+                                width={100}
                             />
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed">
