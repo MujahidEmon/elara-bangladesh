@@ -6,7 +6,7 @@ import elogo from '../../../public/elogo.png';
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-900 pt-16 pb-8 px-4 sm:px-6 lg:px-8 border-t border-gray-800">
+        <footer className="bg-[#fcab35] mt-12 pt-16 pb-8 px-4 sm:px-6 lg:px-8  border-gray-800">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 

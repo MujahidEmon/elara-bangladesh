@@ -2,7 +2,7 @@
 import Image from "next/image";
 
 import headsetImg from "../../../public/feature1.jpg";
-import mouseImg from "../../../public/feature2.jpg";
+import mouseImg from "../../../public/feature3.jpg";
 import keyboardImg from "../../../public/feature2.jpg";
 
 const PromoSection = () => {

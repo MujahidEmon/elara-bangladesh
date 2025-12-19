@@ -1,6 +1,7 @@
 'use client';
 import Image from "next/image";
 import bannerImg from '../../../public/t109.png'
+import DefaultButton from "../shared/DefaultButton/DefaultButton";
 
 const Banner = () => {
   return (
@@ -18,9 +19,7 @@ const Banner = () => {
             Exploring the Diverse Ecosystem of Specialized Gaming Controllers
           </p>
 
-          <button className="bg-[#fcab35] hover:bg-orange-600 text-black hover:text-white btn font-semibold transition">
-            Purchase Now →
-          </button>
+          <DefaultButton text="Purchase Now →"></DefaultButton>
         </div>
 
         {/* RIGHT IMAGE */}
@@ -29,7 +28,7 @@ const Banner = () => {
             src={bannerImg}
             alt="Gaming Controller"
             fill
-            className="object-contain"
+            className="object-contain "
             priority
           />
         </div>

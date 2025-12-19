@@ -9,6 +9,7 @@ import Banner from "../Banner/Banner";
 import FeaturedCategories from "../FeaturedCategories/FeaturedCategories";
 import PromoSection from "../FeaturedCategories/promo";
 import NewProductCard from "../ProductCard/NewProductCard";
+import DefaultButton from "../shared/DefaultButton/DefaultButton";
 
 // Components
 
@@ -83,14 +84,16 @@ export default function Home() {
         <PromoSection></PromoSection>
       </section>
 
-      <section className="my-12 mx-auto">
+      <section className="my-12 mx-auto px-4">
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Our Products</h1>
-        <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {
-            allProducts.map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
+            allProducts.slice(0,6).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
           }
         </div>
-        <button className="btn bg-[#fcab35] text-center">Show All</button>
+        <div className="flex justify-center mt-6 ">
+          <DefaultButton text="Show All"></DefaultButton>
+        </div>
       </section>
 
       {/* Featured Section */}

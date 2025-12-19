@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import DefaultButton from "./DefaultButton/DefaultButton";
 
 const Navbar = () => {
 
@@ -12,8 +14,20 @@ const Navbar = () => {
         { name: "Contact Us", path: "/contact" }
     ]
 
+    const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+
     return (
-        <div className="navbar md:px-8 sticky top-0 z-50 transition-shadow duration-300 ease-in-out shadow-md  bg-[#fffefe]">
+        <div className={`navbar md:px-8 sticky top-0 z-50 transition-shadow duration-300 ease-in-out   bg-[#fffefe] ${scrolled ? "shadow-md" : ""}`}>
             <div className="navbar-start ">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -161,7 +175,7 @@ const Navbar = () => {
                         </div>
 
                         :
-                        <Link href={'/login'}><button className="btn shadow-none md:text-base text-sm bg-[#FCAB35] border-0 ml-3 text-black rounded-sm">Login</button></Link>
+                        <DefaultButton text="Login"></DefaultButton>
 
                 }
 
