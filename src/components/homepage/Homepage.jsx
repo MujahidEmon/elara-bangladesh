@@ -88,7 +88,7 @@ export default function Home() {
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Our Products</h1>
         <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {
-            allProducts.slice(0,6).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
+            allProducts.slice(0, 4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
           }
         </div>
         <div className="flex justify-center mt-6 ">
@@ -96,44 +96,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Section */}
-      <div className="my-14 lg:my-32 px-4 text-center space-y-5 max-w-7xl mx-auto">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-3xl lg:text-5xl">Featured Products</h1>
-          <p className="max-w-2xl font-extralight">
-            Electronics products continue to drive innovation and shape the way
-            we live, work, and interact.
-          </p>
+
+      <section className="max-w-7xl my-12 mx-auto px-4  md:px-0 ">
+        <div className="flex md:flex-row md:mb-0 mb-12 flex-col gap-3 md:gap-0 justify-between">
+          <div className="md:w-1/2">
+            <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={400} width={650}>
+
+            </Image>
+          </div>
+          <div className="md:w-1/2 flex gap-2 flex-col items-center justify-center">
+            <h1 className="text-3xl md:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
+            <p className="max-w-3xs md:max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, consectetur? </p>
+            <DefaultButton text="Grab Now"></DefaultButton>
+          </div>
         </div>
-
-        {loading ? (
-          <div className="min-h-screen flex items-center justify-center">
-            <HashLoader color="#FCAB35" size={60} />
+        
+        <div className="flex md:flex-row flex-col-reverse gap-6 md:gap-0 justify-between">
+          <div className="md:w-1/2 flex gap-2 flex-col items-center justify-center">
+            <h1 className="text-3xl md:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
+            <p className="max-w-3xs md:max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, consectetur? </p>
+            <DefaultButton text="Grab Now"></DefaultButton>
           </div>
-        ) : (
-          <div className="md:flex grid grid-cols-2 md:flex-row flex-wrap px-4 md:px-0 gap-4 mt-12">
-            {[...allProducts]
-              .reverse()
-              .slice(0, 8)
-              .map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
+          <div>
+            <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={400} width={650}>
+
+            </Image>
           </div>
-        )}
+        </div>
+      </section>
 
-        <Link href="/allProducts">
-          <button className="btn btn-outline tracking-wider border-[#FCAB35] hover:bg-[#FCAB35] hover:text-white hover:scale-110 text-[#FCAB35]">
-            View All
-          </button>
-        </Link>
-      </div>
 
-      {/* Best Trimmer Section */}
-      {/* <div className="my-14 lg:my-32 px-4 max-w-screen-xl mx-auto">
-        <AllTrimmers />
-      </div>
 
-      <Ratings /> */}
+
+      {/*<Ratings /> */}
 
       {/* Carousel Section */}
       <div className="flex flex-col lg:flex-row text-white">
