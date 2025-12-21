@@ -1,0 +1,12 @@
+/* Swiper slide default behavior keep */
+.swiper-slide {
+  display: block;
+}
+
+/* Testimonial image fix */
+.swiper-slide img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}

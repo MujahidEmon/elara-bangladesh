@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import elogo from '../../../public/elogo.png';
+import elogo from '../../../public/elogoBlack.png';
+import { IoMailSharp } from "react-icons/io5";
+import { FaFacebookF, FaInstagram, FaLocationArrow, FaPhone, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 const Footer = () => {
     return (
@@ -11,37 +13,26 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
                     {/* Logo and Social */}
-                    <div className="space-y-6">
+                    <div className="space-y-2">
                         <Link href="/" className="inline-block">
                             <Image
                                 src={elogo}
                                 alt="Elara International"
                                 className=" w-auto transition-opacity hover:opacity-90"
-                                height={80}
-                                width={100}
+                                height={200}
+                                width={200}
                             />
                         </Link>
-                        <p className="text-gray-400 text-sm leading-relaxed">
-                            Pioneering global trade solutions with innovation and integrity.
+                        <p className="text-black font-bold uppercase text-sm leading-relaxed">
+                            Where Excellence Meets Commitment
                         </p>
 
                         {/* Social Icons */}
                         <div className="flex space-x-5">
-                            {[
-                                { icon: <FacebookIcon />, label: "Facebook" },
-                                { icon: <LinkedInIcon />, label: "LinkedIn" },
-                                { icon: <TwitterIcon />, label: "Twitter" },
-                                { icon: <InstagramIcon />, label: "Instagram" }
-                            ].map((social, idx) => (
-                                <a
-                                    key={idx}
-                                    href="#"
-                                    className="text-gray-400 hover:text-primary transition-colors duration-300"
-                                    aria-label={social.label}
-                                >
-                                    {social.icon}
-                                </a>
-                            ))}
+                            <FaFacebookF size={20} color="white"></FaFacebookF>
+                            <FaInstagram size={20} color="white"></FaInstagram>
+                            <FaTiktok size={20} color="white"></FaTiktok>
+                            <FaYoutube size={20} color="white"></FaYoutube>
                         </div>
                     </div>
 
@@ -58,7 +49,7 @@ const Footer = () => {
                                 <li key={i}>
                                     <Link
                                         href={link.path}
-                                        className="text-gray-400 hover:text-primary text-sm transition-colors duration-300 flex items-center"
+                                        className="text-black hover:text-primary text-sm transition-colors duration-300 flex items-center"
                                     >
                                         <span className="w-1 h-1 bg-gray-500 rounded-full mr-2"></span>
                                         {link.name}
@@ -83,7 +74,7 @@ const Footer = () => {
                                 <li key={i}>
                                     <Link
                                         href={link.path}
-                                        className="text-gray-400 hover:text-primary text-sm transition-colors duration-300 flex items-center"
+                                        className="text-black hover:text-primary text-sm transition-colors duration-300 flex items-center"
                                     >
                                         <span className="w-1 h-1 bg-gray-500 rounded-full mr-2"></span>
                                         {link.name}
@@ -98,19 +89,19 @@ const Footer = () => {
                         <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-primary">
                             Contact Us
                         </h4>
-                        <ul className="space-y-3 text-gray-400 text-sm">
-                            <li className="flex items-start">
-                                <EmailIcon />
+                        <ul className="space-y-3 text-black text-sm">
+                            <li className="flex items-center gap-1">
+                                <IoMailSharp />
                                 info@elarainternational.com
                             </li>
 
-                            <li className="flex items-start">
-                                <PhoneIcon />
+                            <li className="flex items-center gap-1">
+                                <FaPhone></FaPhone>
                                 +880 1765-580804
                             </li>
 
-                            <li className="flex items-start">
-                                <LocationIcon />
+                            <li className="flex items-center gap-1">
+                                <FaLocationArrow></FaLocationArrow>
                                 123 Business Avenue, Dhaka 1212, Bangladesh
                             </li>
                         </ul>
@@ -120,13 +111,13 @@ const Footer = () => {
 
                 {/* Copyright */}
                 <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-                    <p className="text-gray-500 text-sm mb-4 md:mb-0">
+                    <p className="text-white font-semibold text-sm mb-4 md:mb-0">
                         © {new Date().getFullYear()} Elara International. All rights reserved.
                     </p>
 
                     <div className="flex space-x-6">
-                        <Link href="/TermsAndConditions" className="text-gray-500 hover:text-primary text-sm">
-                            Terms of Service
+                        <Link href="/TermsAndConditions" className="text-white font-semibold hover:text-primary text-sm">
+                            Developed By Mujahid Emon
                         </Link>
                     </div>
                 </div>
@@ -137,46 +128,3 @@ const Footer = () => {
 
 export default Footer;
 
-/* ------- ICON COMPONENTS ------- */
-
-const FacebookIcon = () => (
-    <svg className="w-6 h-6" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12..." />
-    </svg>
-);
-
-const LinkedInIcon = () => (
-    <svg className="w-6 h-6" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M20.447 20.452h-3.554..." />
-    </svg>
-);
-
-const TwitterIcon = () => (
-    <svg className="w-6 h-6" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M23.953 4.57a10 10..." />
-    </svg>
-);
-
-const InstagramIcon = () => (
-    <svg className="w-6 h-6" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M12 2.163c3.204..." />
-    </svg>
-);
-
-const EmailIcon = () => (
-    <svg className="h-5 w-5 mr-3 mt-0.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeWidth={2} d="M3 8l7.89 5.26..." />
-    </svg>
-);
-
-const PhoneIcon = () => (
-    <svg className="h-5 w-5 mr-3 mt-0.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeWidth={2} d="M3 5a2 2..." />
-    </svg>
-);
-
-const LocationIcon = () => (
-    <svg className="h-5 w-5 mr-3 mt-0.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeWidth={2} d="M17.657 16.657..." />
-    </svg>
-);

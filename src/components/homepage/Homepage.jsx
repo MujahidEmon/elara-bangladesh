@@ -10,6 +10,21 @@ import FeaturedCategories from "../FeaturedCategories/FeaturedCategories";
 import PromoSection from "../FeaturedCategories/promo";
 import NewProductCard from "../ProductCard/NewProductCard";
 import DefaultButton from "../shared/DefaultButton/DefaultButton";
+import TestimonialCard from "../TestimonialCard/TestimonialCard";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import bannerImg from '../../../public/109.png'
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import '../../app/swiperStyle.css'
+
+
+
+// import required modules
+import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
 
 // Components
 
@@ -66,6 +81,60 @@ const allProducts = [
   },
 ];
 
+
+export const testimonials = [
+  {
+    id: 1,
+    name: "John Doe",
+    image: "https://readymadeui.com/team-1.webp",
+    rating: 3,
+    text: "ReadymadeUI made it so easy to launch my website. The components are clean, fast to use, and saved me hours of development time.",
+  },
+  {
+    id: 2,
+    name: "Mark Adair",
+    image: "https://readymadeui.com/team-2.webp",
+    rating: 5,
+    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+  },
+  {
+    id: 3,
+    name: "Mark Adair",
+    image: "https://readymadeui.com/team-2.webp",
+    rating: 5,
+    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+  },
+  {
+    id: 4,
+    name: "Mark Adair",
+    image: "https://readymadeui.com/team-2.webp",
+    rating: 5,
+    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+  },
+  {
+    id: 5,
+    name: "Mark Adair",
+    image: "https://readymadeui.com/team-2.webp",
+    rating: 5,
+    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+  },
+  {
+    id: 6,
+    name: "Mark Adair",
+    image: "https://readymadeui.com/team-2.webp",
+    rating: 5,
+    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+  },
+  {
+    id: 7,
+    name: "Mark Adair",
+    image: "https://readymadeui.com/team-2.webp",
+    rating: 5,
+    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+  },
+];
+
+
 export default function Home() {
   const loading = false; // static data so loading false
 
@@ -74,17 +143,20 @@ export default function Home() {
       <Banner />
 
       {/* Featured Categories Section */}
-      <section className="my-12">
+      <section className="my-24">
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Shop By Categories</h1>
         <FeaturedCategories>  </FeaturedCategories>
       </section>
 
       {/* Promo Section */}
-      <section className="my-12">
+      <section className="my-24">
         <PromoSection></PromoSection>
       </section>
 
-      <section className="my-12 mx-auto px-4">
+
+
+      {/* Our Products Section */}
+      <section className="my-24 mx-auto px-4">
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Our Products</h1>
         <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {
@@ -97,28 +169,37 @@ export default function Home() {
       </section>
 
 
-      <section className="max-w-7xl my-12 mx-auto px-4  md:px-0 ">
-        <div className="flex md:flex-row md:mb-0 mb-12 flex-col gap-3 md:gap-0 justify-between">
-          <div className="md:w-1/2">
-            <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={400} width={650}>
+
+
+      {/* Ongoing Offer Section */}
+      <section className="mx-auto my-24 px-8 md:max-w-7xl max-w-sm">
+        <div className="flex lg:flex-row lg:mb-0 mb-18 flex-col gap-8 lg:gap-0 justify-between">
+          <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center" >
+            <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={350} width={700}>
 
             </Image>
           </div>
-          <div className="md:w-1/2 flex gap-2 flex-col items-center justify-center">
-            <h1 className="text-3xl md:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
+          <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center">
+            <h1 className="text-3xl lg:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
             <p className="max-w-3xs md:max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, consectetur? </p>
-            <DefaultButton text="Grab Now"></DefaultButton>
+            <div className="flex justify-center gap-3 items-center">
+              <p className="font-bold text-3xl text-amber-600">85$</p>
+              <DefaultButton text="Grab Now"></DefaultButton>
+            </div>
           </div>
         </div>
-        
-        <div className="flex md:flex-row flex-col-reverse gap-6 md:gap-0 justify-between">
-          <div className="md:w-1/2 flex gap-2 flex-col items-center justify-center">
-            <h1 className="text-3xl md:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
+
+        <div className="flex lg:flex-row flex-col-reverse gap-6 lg:gap-0 justify-between">
+          <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center">
+            <h1 className="text-3xl lg:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
             <p className="max-w-3xs md:max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, consectetur? </p>
-            <DefaultButton text="Grab Now"></DefaultButton>
+            <div className="flex justify-center gap-3 items-center">
+              <p className="font-bold text-3xl text-amber-600">85$</p>
+              <DefaultButton text="Grab Now"></DefaultButton>
+            </div>
           </div>
           <div>
-            <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={400} width={650}>
+            <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={350} width={700}>
 
             </Image>
           </div>
@@ -126,12 +207,100 @@ export default function Home() {
       </section>
 
 
+      {/* New Arrival Section */}
+      <section className="mx-auto my-24 px-8 md:max-w-7xl max-w-sm">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl md:text-4xl font-semibold md:w-1/3 w-full">New Arrival</h1>
+          <div className="hidden md:flex gap-4">
+            <Link href="#" className="hover:text-[#fcab35] font-medium">
+              Desk Lamp
+            </Link>
+            <Link href="#" className="hover:text-[#fcab35] font-medium">
+              Mini Blender
+            </Link>
+            <Link href="#" className="hover:text-[#fcab35] font-medium">
+              Grinder
+            </Link>
+            <Link href="#" className="hover:text-[#fcab35] font-medium">
+              Electric Cooker
+            </Link>
+          </div>
+
+          {/* DROPDOWN (Mobile) */}
+          <div className="md:hidden w-full">
+            <select
+              className="dropdown dropdown-end border-gray-300 rounded-md px-3 py-2 
+                     focus:outline-none focus:ring-2 focus:ring-[#fcab35]"
+            >
+              <option>Desk Lamp</option>
+              <option>Mini Blender</option>
+              <option>Grinder</option>
+              <option>Electric Cooker</option>
+            </select>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {
+            allProducts.slice(0, 4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
+          }
+        </div>
+      </section>
+
+
+
+
+      {/* Weekly Deals Section */}
+      <section className="bg-[#ecedec] w-full rounded-2xl my-24  drop-shadow-2xl/30">
+        <div className="max-w-7xl mx-auto flex md:flex-row flex-col-reverse items-center justify-between  px-4 md:px-0">
+          {/* For TSX uncomment the commented types below */}
+          {/* For TSX uncomment the commented types below */}
+          <div className="space-y-6 w-1/2 text-center flex flex-col items-center">
+            <h1 className="font-semibold text-4xl">Weekly Deals</h1>
+            <p>Don't Miss Out - Gear Up for Victory with This Week's Unmissable Deals!</p>
+            <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
+              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                <span className="countdown font-mono md:text-5xl text-2xl">
+                  <span style={{ "--value": 15 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>15</span>
+                </span>
+                days
+              </div>
+              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                <span className="countdown font-mono text-5xl">
+                  <span style={{ "--value": 10 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>10</span>
+                </span>
+                hours
+              </div>
+              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                <span className="countdown font-mono text-5xl">
+                  <span style={{ "--value": 24 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>24</span>
+                </span>
+                min
+              </div>
+              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                <span className="countdown font-mono text-5xl">
+                  <span style={{ "--value": 59 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>59</span>
+                </span>
+                sec
+              </div>
+            </div>
+            <DefaultButton text="Shop Now"></DefaultButton>
+          </div>
+          <div className="w-1/2  flex flex-col items-center  justify-center">
+            <Image src={bannerImg} alt="Banner Image" height={250} width={250} className="hover:scale-110  duration-300" />
+          </div>
+        </div>
+      </section>
 
 
       {/*<Ratings /> */}
+      <section className="max-w-7xl my-24 mx-auto">
+          
+      </section>
+
+
 
       {/* Carousel Section */}
-      <div className="flex flex-col lg:flex-row text-white">
+      {/* <div className="flex flex-col lg:flex-row text-white">
         {[
           "https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp",
           "https://i.ibb.co.com/chZzWbwR/banner-image-5-c7660f9f-ff9c-4284-9885-de48ab56d108.webp",
@@ -153,7 +322,7 @@ export default function Home() {
             <button className="mt-2 border-b-2">Buy Now</button>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
