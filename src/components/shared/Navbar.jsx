@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import DefaultButton from "./DefaultButton/DefaultButton";
+import { IoSearch } from "react-icons/io5";
 
 const Navbar = () => {
 
@@ -16,14 +17,14 @@ const Navbar = () => {
 
     const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 10);
+        };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
 
     return (
@@ -38,31 +39,31 @@ const Navbar = () => {
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
                         <li>
-                            <Link 
-                            className={`text-black px-4 py-2 transition duration-300 relative
+                            <Link
+                                className={`text-black px-4 py-2 transition duration-300 relative
                                     ${usePathname() === '/'
-                                    ? 'font-semibold bg-[#FCAB35]'
-                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
-                                }`}
+                                        ? 'font-semibold bg-[#FCAB35]'
+                                        : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                    }`}
                                 href={'/'}>Home</Link>
                         </li>
                         <li>
                             <Link
-                            className={`text-black px-4 py-2 transition duration-300 relative
+                                className={`text-black px-4 py-2 transition duration-300 relative
                                     ${usePathname() === '/allProducts'
-                                    ? 'font-semibold bg-[#FCAB35]'
-                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
-                                }`}
+                                        ? 'font-semibold bg-[#FCAB35]'
+                                        : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                    }`}
                                 href={'/allProducts'}>All Products</Link>
                         </li>
                         <li>
-                            <Link 
-                        className={`text-black px-4 py-2 transition duration-300 relative
+                            <Link
+                                className={`text-black px-4 py-2 transition duration-300 relative
                                     ${usePathname() === '/contact'
-                                    ? 'font-semibold bg-[#FCAB35]'
-                                    : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
-                                }`}
-                            href={'/contact'}>Contact Us</Link>
+                                        ? 'font-semibold bg-[#FCAB35]'
+                                        : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                                    }`}
+                                href={'/contact'}>Contact Us</Link>
                         </li>
                     </ul>
                 </div>
@@ -73,8 +74,8 @@ const Navbar = () => {
                     className="menu menu-horizontal px-1"
                 >
                     <li>
-                        <Link 
-                        className={`text-black px-4 py-2 transition duration-300 relative
+                        <Link
+                            className={`text-black px-4 py-2 transition duration-300 relative
                                     ${usePathname() === '/'
                                     ? 'font-semibold bg-[#FCAB35]'
                                     : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
@@ -91,8 +92,8 @@ const Navbar = () => {
                             href={'/allProducts'}>All Products</Link>
                     </li>
                     <li>
-                        <Link 
-                        className={`text-black px-4 py-2 transition duration-300 relative
+                        <Link
+                            className={`text-black px-4 py-2 transition duration-300 relative
                                     ${usePathname() === '/contact'
                                     ? 'font-semibold bg-[#FCAB35]'
                                     : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
@@ -102,9 +103,9 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
+                <button className="mr-3 btn btn-circle bg-white border-none"><IoSearch size={25}></IoSearch></button>
                 <div className="dropdown dropdown-end">
                     <div>
-
                     </div>
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                         <div className="indicator ">
@@ -175,7 +176,7 @@ const Navbar = () => {
                         </div>
 
                         :
-                        <DefaultButton text="Login"></DefaultButton>
+                        <DefaultButton text="Login" href="login"></DefaultButton>
 
                 }
 

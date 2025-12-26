@@ -25,6 +25,7 @@ import '../../app/swiperStyle.css'
 
 // import required modules
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
+import { FaStar } from "react-icons/fa";
 
 // Components
 
@@ -143,20 +144,20 @@ export default function Home() {
       <Banner />
 
       {/* Featured Categories Section */}
-      <section className="my-24">
+      <section className="my-24 max-w-7xl mx-auto">
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Shop By Categories</h1>
         <FeaturedCategories>  </FeaturedCategories>
       </section>
 
       {/* Promo Section */}
-      <section className="my-24">
+      <section className="my-24 max-w-7xl mx-auto">
         <PromoSection></PromoSection>
-      </section>
+      </section> 
 
 
 
       {/* Our Products Section */}
-      <section className="my-24 mx-auto px-4">
+      <section className="my-24 mx-auto px-4 md:max-w-7xl max-w-sm">
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Our Products</h1>
         <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {
@@ -294,7 +295,41 @@ export default function Home() {
 
       {/*<Ratings /> */}
       <section className="max-w-7xl my-24 mx-auto">
-          
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={30}
+          // pagination={{ clickable: true }}
+          modules={[Autoplay]}
+          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          speed={800}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          className="mt-16 .custom-swiper"
+        >
+          {testimonials.map(({ id, name, image, rating, text }) => (
+            <SwiperSlide key={id}>
+              <div className="flex flex-col max-w-sm items-center text-center px-3">
+                <Image
+                  src={image}
+                  className="w-24 h-24 rounded-full border-2 border-purple-500"
+                  alt={name}
+                  height={150}
+                  width={150}
+                />
+                <h4 className="text-sm font-semibold mt-6">{name}</h4>
+                <div className="flex justify-center space-x-1 mt-2.5">
+                  {[...Array(5)].map((_, idx) => (
+                    <FaStar key={idx} />
+                  ))}
+                </div>
+                <p className="text-sm leading-relaxed text-gray-300 font-normal mt-6">{text}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </section>
 
 

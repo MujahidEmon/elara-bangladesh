@@ -8,7 +8,7 @@ import { FaFacebookF, FaInstagram, FaLocationArrow, FaPhone, FaTiktok, FaYoutube
 
 const Footer = () => {
     return (
-        <footer className="bg-[#fcab35] mt-12 pt-16 pb-8 px-4 sm:px-6 lg:px-8  border-gray-800">
+        <footer className="bg-[#fcab35]  pt-16 pb-8 px-4 sm:px-6 lg:px-8  border-gray-800">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
@@ -23,7 +23,7 @@ const Footer = () => {
                                 width={200}
                             />
                         </Link>
-                        <p className="text-black font-bold uppercase text-sm leading-relaxed">
+                        <p className="text-white   font-bold uppercase text-sm leading-relaxed">
                             Where Excellence Meets Commitment
                         </p>
 
@@ -38,7 +38,7 @@ const Footer = () => {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-primary">
+                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
                             Quick Links
                         </h4>
                         <ul className="space-y-3">
@@ -61,8 +61,8 @@ const Footer = () => {
 
                     {/* Information */}
                     <div>
-                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-primary">
-                            Information
+                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
+                            Information 
                         </h4>
                         <ul className="space-y-3">
                             {[
@@ -86,7 +86,7 @@ const Footer = () => {
 
                     {/* Contact */}
                     <div>
-                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-primary">
+                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
                             Contact Us
                         </h4>
                         <ul className="space-y-3 text-black text-sm">
