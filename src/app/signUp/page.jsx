@@ -1,23 +1,32 @@
+'use client';
+import axios from 'axios';
 import Link from 'next/link';
 import React from 'react';
 import { FaGoogle, FaImage } from 'react-icons/fa';
 
 const page = () => {
+    const handleSignUp = async(event) => {
+        event.preventDefault();
+
+        const newUser = {
+            name: event.target.name.value,
+            email: event.target.email.value,
+            password: event.target.password.value,
+            // image: event.target.image.files[0],
+        }
+        const {data} = await axios.post('http://localhost:3000/signUp/api', newUser);
+
+        console.log(data);
+    }
+
+
     return (
         <div
-            // style={{
-            //     backgroundImage: 'url("https://i.ibb.co.com/mCGK4RHP/elara-wallpaper.png")',
-            //     backgroundSize: 'cover',
-            //     backgroundPosition: 'center',
-            //     backgroundRepeat: 'no-repeat'
-
-            // }}
             className='py-10'
         >
             <div className="flex lg:w-2/3 w-full  shadow-2xl rounded-xl lg:max-w-xl max-w-sm backdrop-blur-2xl mx-auto  font-raleway justify-center ">
                 <form
-                    // onSubmit={handleRegister}
-                    // onSubmit={handleSubmit(onSubmit)}
+                    onSubmit={handleSignUp}
                     className="max-w-lg w-full px-6 py-8 mx-auto"
                 >
                     <div className="mb-6">
