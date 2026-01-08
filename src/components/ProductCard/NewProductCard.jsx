@@ -1,3 +1,4 @@
+'use client';
 const { default: Image } = require("next/image");
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 

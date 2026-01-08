@@ -1,3 +1,4 @@
+'use client';
 import NewProductCard from "@/components/ProductCard/NewProductCard";
 import { FiFilter } from "react-icons/fi";
 

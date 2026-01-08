@@ -1,10 +1,25 @@
+"use client";
 import Link from 'next/link';
 import React from 'react';
 import { FaGoogle } from 'react-icons/fa';
 import { HashLoader } from 'react-spinners';
+import { signIn } from 'next-auth/react';
 
 const Page = () => {
     // const [showPass, setShowPass] = useState(false);
+
+    const handleLogin = (e) =>{
+        e.preventDefault();
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+
+        const response = signIn('credentials',{
+            email, password, redirect: false
+        })
+
+        console.log(response);
+    }
+
     return (
         <div 
             className='py-10'
@@ -12,7 +27,9 @@ const Page = () => {
             <div
 
                 className="flex lg:w-2/3 w-full  shadow-2xl rounded-xl lg:max-w-xl max-w-sm backdrop-blur-2xl mx-auto  font-raleway justify-center">
-                <form  className="max-w-lg w-full px-6 py-8 mx-auto">
+                <form  className="max-w-lg w-full px-6 py-8 mx-auto"
+                onSubmit={handleLogin}
+                >
                     <div className="mb-6">
                         <h3 className="text-base-400 font-rancho text-center text-4xl font-bold">
                             Login
@@ -41,8 +58,9 @@ const Page = () => {
                         <div className="relative flex items-center">
                             <input
                                 name="password"
-                                type={"password"}
+                                type="password"
                                 required
+                                autoComplete="current-password"
                                 className="w-full text-sm text-base-400 rounded-lg border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
                                 placeholder="Enter password"
                             />

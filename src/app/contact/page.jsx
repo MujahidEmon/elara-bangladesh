@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { FaFacebookSquare, FaPhone } from 'react-icons/fa';
 import { IoMailOutline } from "react-icons/io5";
