@@ -4,31 +4,46 @@ import React from 'react';
 import { FaGoogle } from 'react-icons/fa';
 import { HashLoader } from 'react-spinners';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
     // const [showPass, setShowPass] = useState(false);
 
-    const handleLogin = (e) =>{
+    const router = useRouter()
+    const handleLogin = (e) => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
 
-        const response = signIn('credentials',{
+        const response = signIn('credentials', {
             email, password, redirect: false
         })
+
+        if(response.status === 200){
+            router.push('/');
+        }
 
         console.log(response);
     }
 
+
+    //google login
+    const handleGoogleLogin = async () => {
+        const response = await signIn('google');
+        if (response.status === 200) {
+            router.push('/');
+        }
+    }
+
     return (
-        <div 
+        <div
             className='py-10'
         >
             <div
 
                 className="flex lg:w-2/3 w-full  shadow-2xl rounded-xl lg:max-w-xl max-w-sm backdrop-blur-2xl mx-auto  font-raleway justify-center">
-                <form  className="max-w-lg w-full px-6 py-8 mx-auto"
-                onSubmit={handleLogin}
+                <form className="max-w-lg w-full px-6 py-8 mx-auto"
+                    onSubmit={handleLogin}
                 >
                     <div className="mb-6">
                         <h3 className="text-base-400 font-rancho text-center text-4xl font-bold">
@@ -107,8 +122,8 @@ const Page = () => {
 
 
                         <div className="flex items-center justify-center">
-                            <button className="btn text-white font-rancho bg-[#FCAB35] text-lg w-full shadow-none border-none">
-                                Sign In With Google<FaGoogle size={15} color='white'/>
+                            <button onClick={handleGoogleLogin} className="btn text-white font-rancho bg-[#FCAB35] text-lg w-full shadow-none border-none">
+                                Sign In With Google<FaGoogle size={15} color='white' />
                             </button>
 
                         </div>
