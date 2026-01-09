@@ -1,60 +1,22 @@
-'use client';
+
 import NewProductCard from "@/components/ProductCard/NewProductCard";
+import axios from "axios";
 import { FiFilter } from "react-icons/fi";
 
-const AllProducts = () => {
+const getAllProducts = async () =>{
+    const {data} = await axios.get('http://localhost:3000/products/api/get-all');
+    // console.log(data);
+    return data;
+}
 
+
+const AllProducts = async () => {
+
+    
+    const products = await getAllProducts();
+    console.log(products);
     // 🔹 Static products array
-    const allProducts = [
-        {
-            _id: "1",
-            name: "Smart Watch",
-            price: 120,
-            image: "https://i.ibb.co/0jZ3QbP/watch.jpg",
-        },
-        {
-            _id: "2",
-            name: "Wireless Headphone",
-            price: 80,
-            image: "https://i.ibb.co/3rGz8bN/headphone.jpg",
-        },
-        {
-            _id: "3",
-            name: "Gaming Mouse",
-            price: 35,
-            image: "https://i.ibb.co/QXnK8Xr/mouse.jpg",
-        },
-        {
-            _id: "4",
-            name: "Mechanical Keyboard",
-            price: 95,
-            image: "https://i.ibb.co/zF1YcK7/keyboard.jpg",
-        },
-        {
-            _id: "5",
-            name: "Bluetooth Speaker",
-            price: 60,
-            image: "https://i.ibb.co/Yk9R4hR/speaker.jpg",
-        },
-        {
-            _id: "6",
-            name: "VR Headset",
-            price: 250,
-            image: "https://i.ibb.co/0M9f0ZP/vr.jpg",
-        },
-        {
-            _id: "7",
-            name: "Power Bank",
-            price: 40,
-            image: "https://i.ibb.co/7kW8z5n/powerbank.jpg",
-        },
-        {
-            _id: "8",
-            name: "USB Hub",
-            price: 25,
-            image: "https://i.ibb.co/Wk2Z8YF/usbhub.jpg",
-        },
-    ];
+    
 
 
     const categories = [
@@ -144,7 +106,7 @@ const AllProducts = () => {
 
             {/* Products Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-                {allProducts.map((product, idx) => (
+                {products.map((product, idx) => (
                     <NewProductCard key={idx} product={product} />
                 ))}
             </div>

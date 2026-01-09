@@ -49,7 +49,29 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  callbacks: {},
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        const { email, name, image } = user;
+        try {
+          const db = await connectDB();
+          const usersCollection = db.collection("users");
+          const existingUser = await usersCollection.findOne({ email });
+          if(!existingUser){
+            const response = await usersCollection.insertOne(user);
+            return user;
+          }
+          else{
+            return user;
+          }
+        } catch (error) {
+            console.error("Error in Google sign-in callback:", error);
+        }
+      } else {
+        return user;
+      }
+    },
+  },
   pages: {
     signIn: "/login",
   },

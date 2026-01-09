@@ -3,13 +3,14 @@ import Link from 'next/link';
 import React from 'react';
 import { FaGoogle } from 'react-icons/fa';
 import { HashLoader } from 'react-spinners';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 const Page = () => {
     // const [showPass, setShowPass] = useState(false);
 
     const router = useRouter()
+    const session = useSession();
     const handleLogin = (e) => {
         e.preventDefault();
         const email = e.target.email.value;
@@ -17,23 +18,23 @@ const Page = () => {
 
         const response = signIn('credentials', {
             email, password, redirect: false
-        })
-
-        if(response.status === 200){
-            router.push('/');
-        }
-
+        });
         console.log(response);
     }
 
 
     //google login
-    const handleGoogleLogin = async () => {
-        const response = await signIn('google');
-        if (response.status === 200) {
-            router.push('/');
-        }
+    const handleGoogleLogin =  () => {
+        const response =  signIn('google', { redirect: false });
     }
+
+
+    //redirecting user after login
+    if(session?.status === 'authenticated'){
+        router.push('/')
+    }
+
+    
 
     return (
         <div
