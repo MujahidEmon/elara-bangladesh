@@ -4,8 +4,7 @@ import axios from "axios";
 import { FiFilter } from "react-icons/fi";
 
 const getAllProducts = async () =>{
-    const {data} = await axios.get('http://localhost:3000/products/api/get-all');
-    // console.log(data);
+    const {data} = await axios.get('http://localhost:3000/api/products/get-all');
     return data;
 }
 

@@ -26,62 +26,18 @@ import '../../app/swiperStyle.css'
 // import required modules
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
 import { FaStar } from "react-icons/fa";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 // Components
 
 
-// 🔹 Static products array
-const allProducts = [
-  {
-    _id: "1",
-    name: "Smart Watch",
-    price: 120,
-    image: "https://i.ibb.co/0jZ3QbP/watch.jpg",
-  },
-  {
-    _id: "2",
-    name: "Wireless Headphone",
-    price: 80,
-    image: "https://i.ibb.co/3rGz8bN/headphone.jpg",
-  },
-  {
-    _id: "3",
-    name: "Gaming Mouse",
-    price: 35,
-    image: "https://i.ibb.co/QXnK8Xr/mouse.jpg",
-  },
-  {
-    _id: "4",
-    name: "Mechanical Keyboard",
-    price: 95,
-    image: "https://i.ibb.co/zF1YcK7/keyboard.jpg",
-  },
-  {
-    _id: "5",
-    name: "Bluetooth Speaker",
-    price: 60,
-    image: "https://i.ibb.co/Yk9R4hR/speaker.jpg",
-  },
-  {
-    _id: "6",
-    name: "VR Headset",
-    price: 250,
-    image: "https://i.ibb.co/0M9f0ZP/vr.jpg",
-  },
-  {
-    _id: "7",
-    name: "Power Bank",
-    price: 40,
-    image: "https://i.ibb.co/7kW8z5n/powerbank.jpg",
-  },
-  {
-    _id: "8",
-    name: "USB Hub",
-    price: 25,
-    image: "https://i.ibb.co/Wk2Z8YF/usbhub.jpg",
-  },
-];
 
+const getAllProducts = async () => {
+  const { data } = await axios.get('http://localhost:3000/products/api/get-all');
+  // console.log(data);
+  return data;
+}
 
 export const testimonials = [
   {
@@ -137,8 +93,24 @@ export const testimonials = [
 
 
 export default function Home() {
-  const loading = false; // static data so loading false
 
+  const [products, setProducts] = useState([])
+
+
+  useEffect(() => {
+    const getAllProducts = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:3000/products/api/get-all");
+        setProducts(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getAllProducts();
+  }, [])
+  console.log(products);
+  const loading = false; // static data so loading false
   return (
     <div>
       <Banner />
@@ -152,7 +124,7 @@ export default function Home() {
       {/* Promo Section */}
       <section className="my-24 max-w-7xl mx-auto">
         <PromoSection></PromoSection>
-      </section> 
+      </section>
 
 
 
@@ -161,7 +133,7 @@ export default function Home() {
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Our Products</h1>
         <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {
-            allProducts.slice(0, 4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
+            products.slice(0,4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
           }
         </div>
         <div className="flex justify-center mt-6 ">
@@ -242,7 +214,7 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {
-            allProducts.slice(0, 4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
+            products.slice(0, 4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
           }
         </div>
       </section>
