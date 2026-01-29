@@ -1,10 +1,11 @@
 'use client';
 const { default: Image } = require("next/image");
+import Link from "next/link";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 
 
 const NewProductCard = ({ product }) => {
-    const { image, productName, price } = product;
+    const { image, productName, price, _id } = product;
     // <figure className="hover-gallery h-64 object-contain">
 
     //     <Image height={200} alt="text" width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-1.webp" />
@@ -13,7 +14,7 @@ const NewProductCard = ({ product }) => {
     //     <Image height={200} alt="text" width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-4.webp" />
     // </figure>
     return (
-        <div
+        <Link href={`/products/${_id}`}
             className="bg-white border border-gray-200 max-w-2xs hover:shadow-lg shadow-[#ffdca3] overflow-hidden 
                  rounded-2xl  transition-all relative"
         >
@@ -53,7 +54,7 @@ const NewProductCard = ({ product }) => {
 
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 

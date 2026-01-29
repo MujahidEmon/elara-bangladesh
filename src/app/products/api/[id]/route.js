@@ -1,6 +1,5 @@
 import { connectDB } from "@/lib/connectDB";
 import { ObjectId } from "mongodb";
-import React from "react";
 
 export async function GET(request, { params }){
   const param = await params;
