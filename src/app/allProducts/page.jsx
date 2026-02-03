@@ -93,7 +93,7 @@ const AllProducts = async () => {
                             <li key={idx}>
                                 <a
                                     // onClick={() => setSelectedCategory(category)}
-                                    className={"bg-[#FCAB35] text-white font-bold"}
+                                    className={" text-gray-800 "}
                                 >
                                     {category.name}
                                 </a>

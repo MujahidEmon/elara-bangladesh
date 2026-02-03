@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import DefaultButton from "./DefaultButton/DefaultButton";
 import { IoSearch } from "react-icons/io5";
 import { signOut, useSession } from "next-auth/react";
+import useLocalCart from "@/services/useLocalCart";
 
 const Navbar = () => {
 
+    const {cartProducts}= useLocalCart();
     const session = useSession();
     const user = session?.data?.user;
     console.log(session);
@@ -127,7 +129,7 @@ const Navbar = () => {
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                                 />
                             </svg>
-                            <span className="badge badge-sm bg-accent rounded-sm indicator-item">4</span>
+                            <span className="badge badge-sm bg-accent rounded-sm indicator-item">{cartProducts.length}</span>
                         </div>
                     </div>
                     <div
@@ -135,7 +137,7 @@ const Navbar = () => {
                         className="card card-compact dropdown-content bg-base-100 z-1 mt-3 w-52 shadow"
                     >
                         <div className="card-body">
-                            <span className="text-lg text-[#FCAB35] font-bold">4 Items</span>
+                            <span className="text-lg text-[#FCAB35] font-bold">{cartProducts.length} Items</span>
                             <span className="text-[#FCAB35]">Subtotal: BDT {120}</span>
                             <div className="card-actions">
                                 <Link href={'/cart'} className="btn border-[#FCAB35] text-[#FCAB35] btn-outline">View cart</Link>

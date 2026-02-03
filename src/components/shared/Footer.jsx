@@ -8,23 +8,23 @@ import { FaFacebookF, FaInstagram, FaLocationArrow, FaPhone, FaTiktok, FaYoutube
 
 const Footer = () => {
     return (
-        <footer className="bg-[#fcab35]  pt-16 pb-8 px-4 sm:px-6 lg:px-8  border-gray-800">
-            <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <footer className="bg-[#fcab35]  pt-16 pb-8 px-6 sm:px-6 lg:px-8  border-gray-800">
+            <div className="lg:max-w-7xl max-w-sm mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 md:gap-12 gap-4">
 
                     {/* Logo and Social */}
-                    <div className="space-y-2">
+                    <div className="space-y-1 col-span-2 md:space-y-2 flex flex-col justify-center items-center">
                         <Link href="/" className="inline-block">
                             <Image
                                 src={elogo}
                                 alt="Elara International"
-                                className=" w-auto transition-opacity hover:opacity-90"
+                                className="lg:h-fit h-12 w-auto transition-opacity hover:opacity-90"
                                 height={200}
                                 width={200}
                             />
                         </Link>
-                        <p className="text-white   font-bold uppercase text-sm leading-relaxed">
-                            Where Excellence Meets Commitment
+                        <p className="text-white   font-bold uppercase text-xs leading-relaxed">
+                            Committed to Excellence 
                         </p>
 
                         {/* Social Icons */}
@@ -85,11 +85,11 @@ const Footer = () => {
                     </div>
 
                     {/* Contact */}
-                    <div>
-                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
+                    <div className="col-span-2 flex flex-col items-center">
+                        <h4 className="text-lg font-semibold text-gray-800 mb-2 mt-4 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-black">
                             Contact Us
                         </h4>
-                        <ul className="space-y-3 text-black text-sm">
+                        <ul className="space-y-1 flex flex-col items-center text-black text-sm">
                             <li className="flex items-center gap-1">
                                 <IoMailSharp />
                                 info@elarainternational.com
@@ -98,6 +98,10 @@ const Footer = () => {
                             <li className="flex items-center gap-1">
                                 <FaPhone></FaPhone>
                                 +880 1765-580804
+                            </li>
+                            <li className="flex items-center gap-1">
+                                <FaPhone></FaPhone>
+                                +880 1518-465333
                             </li>
 
                             <li className="flex items-center gap-1">

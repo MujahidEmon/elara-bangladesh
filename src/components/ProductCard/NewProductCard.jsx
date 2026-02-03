@@ -1,11 +1,13 @@
 'use client';
 const { default: Image } = require("next/image");
+import useLocalCart from "@/services/useLocalCart";
 import Link from "next/link";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 
 
 const NewProductCard = ({ product }) => {
     const { image, productName, price, _id } = product;
+    const {handleAddToCart} = useLocalCart();
     // <figure className="hover-gallery h-64 object-contain">
 
     //     <Image height={200} alt="text" width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-1.webp" />
@@ -43,8 +45,11 @@ const NewProductCard = ({ product }) => {
                         {price} Taka
                     </h4>
                     <button
+                        onClick={() => {
+                            handleAddToCart(product);
+                        }}
                         type="button"
-                        className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-100 
+                        className="btn btn-circle bg-gray-100 
                        flex items-center justify-center rounded-full 
                        cursor-pointer"
                         aria-label="Add to Cart"

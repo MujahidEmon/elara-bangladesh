@@ -1,25 +1,45 @@
 "use client";
+import { getProductById } from "@/services/getProducts";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import CartCard from "@/components/CartCard/CartCard";
 
-export default function CheckoutPage({ product }) {
+export default function CheckoutPage() {
+    const params = useParams();
     const [districts, setDistricts] = useState([]);
     const [district, setDistrict] = useState([]);
     const [upozilas, setUpozilas] = useState([]);
     const [upozila, setUpozila] = useState([]);
-    console.log(['Dhaka City', ...districts]);
+    const [product, setProduct] = useState([])
     const distWithDhakaCity = [{ id: 0, name: 'Dhaka City' }, ...districts];
-    console.log(upozilas);
-    console.log(district);
-    console.log(DhakaCityPS);
+    
 
+
+
+    //product related functions
+    const loadProduct = async() => {
+        const data = await getProductById(params.id);
+        const {_id, ...rest} = data;
+        setProduct({productId: data?._id, ...rest});
+    }
+
+    // Load product on component mount
+    useEffect(() => {
+        loadProduct();
+    }, [params.id]);
+    console.log(product);
+
+    const {price, productName} = product;
+
+
+
+    // Fetch Districts
     useEffect(() => {
         fetch("https://bdopenapi.vercel.app/api/geo/districts")
             .then((res) => res.json())
             .then((data) => setDistricts(data?.data || []));
     }, []);
 
-
+    // Fetch Upozilas based on selected District
     useEffect(() => {
         if (district?.id === 0) {
             setUpozilas(DhakaCityPS.map((ps, index) => ({ id: index + 1, name: ps })));
@@ -31,20 +51,16 @@ export default function CheckoutPage({ product }) {
         }
     }, [district?.id]);
 
-    const [cartProducts, setCartProducts] = useState([
-        { id: 1, name: "Product 1", price: 500, quantity: 1 },
-        { id: 2, name: "Product 2", price: 300, quantity: 2 },
-    ]);
+
+
 
     //   const totalPrice = cartProducts.reduce(
     //     (acc, item) => acc + item.price * item.quantity,
     //     0
     //   );
-    const shipping = 110;
-    //   const grandTotal = totalPrice + shipping;
-    // const districts = allDivision();
-    console.log(districts);
 
+
+    //Order related functions
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
 
@@ -55,9 +71,10 @@ export default function CheckoutPage({ product }) {
             phone: form.phone.value,
             address: form.address.value,
             note: form.note.value,
-            paymentMethod: "pay-on-delivery",
+            paymentMethod: "COD",
             district: district?.name || '',
             thana: upozila?.name || '',
+            productDetails: product,
         };
 
         console.log("Order Data:", orderData);
@@ -79,15 +96,12 @@ export default function CheckoutPage({ product }) {
     return (
         <div>
             <section className="">
-                {/* Dark overlay */}
-                <div className=""></div>
-
                 <form
                     onSubmit={handlePlaceOrder}
-                    className=" z-10 mx-auto max-w-7xl px-6 sm:px-10 py-16"
+                    className=" mx-auto max-w-7xl px-6 sm:px-10 py-6"
                 >
                     <div className="rounded-2xl bg-[#c2ffe1] bg-opacity-70 backdrop-blur-md shadow-lg p-8 sm:p-12">
-                        <h1 className="text-center text-black text-4xl font-bold mb-8">
+                        <h1 className="text-center text-black text-2xl md:text-4xl font-bold mb-8">
                             Checkout
                         </h1>
 
@@ -143,8 +157,6 @@ export default function CheckoutPage({ product }) {
                                                 District
                                             </label>
                                             <select
-                                                required
-                                                // value={district?.id || ""}
                                                 onChange={(e) => {
                                                     const selected = distWithDhakaCity.find(
                                                         (d) => d.id == e.target.value,
@@ -169,7 +181,6 @@ export default function CheckoutPage({ product }) {
                                                 Thana/Upozila
                                             </label>
                                             <select
-                                                required
                                                 disabled={!district?.name}
                                                 // value={district?.id || ""}
                                                 onChange={(e) => {
@@ -189,7 +200,7 @@ export default function CheckoutPage({ product }) {
                                             </select>
                                         </div>
 
-                                        <div className="sm:col-span-2">
+                                        {/* <div className="sm:col-span-2">
                                             <label className="block mb-2 text-sm font-medium">
                                                 Any Note?
                                             </label>
@@ -199,7 +210,7 @@ export default function CheckoutPage({ product }) {
                                                 placeholder="Leave a note"
                                                 className="w-full rounded-lg  bg-white px-4 py-2 text-sm text-gray-950"
                                             />
-                                        </div>
+                                        </div> */}
 
                                         <div className="sm:col-span-2">
                                             <button
@@ -228,7 +239,7 @@ export default function CheckoutPage({ product }) {
                                 <div className="space-y-3 text-base-content text-sm">
                                     <div className="flex font-semibold justify-between">
                                         <span>Product Price</span>
-                                        <span>BDT 847</span>
+                                        <span>BDT {price}</span>
                                     </div>
                                     <div className="flex font-semibold justify-between">
                                         <span>Shipping</span>
@@ -239,7 +250,7 @@ export default function CheckoutPage({ product }) {
                                 <div className="mt-6 border-t border-gray-200">
                                     <div className="flex justify-between text-xl font-semibold">
                                         <span>Total</span>
-                                        <span>BDT </span>
+                                        <span>BDT {district?.name === 'Dhaka City' ? parseInt(price) + 70 : parseInt(price) + 130}</span>
                                     </div>
                                     <p className="mt-2 text-sm text-gray-400">
                                         Shipping costs are calculated during checkout.

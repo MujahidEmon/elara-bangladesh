@@ -1,14 +1,34 @@
+'use client';
 import DefaultButton from "@/components/shared/DefaultButton/DefaultButton";
 import { getProductById } from "@/services/getProducts";
+import useLocalCart from "@/services/useLocalCart";
 import Image from "next/image";
-import React from "react";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-const ProductDetailsPage =async ({ params }) => {
-  const {id} = await params;
-  const product = await getProductById(id);
+const ProductDetailsPage = () => {
+  const {handleAddToCart} = useLocalCart();
+  const params = useParams();
+  const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(false);
+  const loadProduct = async({params})=>{
+    setLoading(true);
+    const id = params?.id;
+    const p = await getProductById(id);
+    setProduct(p);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    loadProduct({params});
+  },[params])
+
   console.log(product);
+
   const {image, price, productName, category, description, _id} = product;
-  return (
+
+  if(loading) return <p className="min-h-screen flex items-center justify-center text-4xl font-bold">Loading...</p>;
+   return (
     <div className="p-4 bg-gray-100">
       <div className="lg:max-w-6xl max-w-xl mx-auto">
         <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
@@ -18,7 +38,7 @@ const ProductDetailsPage =async ({ params }) => {
                 <Image
                   height={450}
                   width={650}
-                  src={image}
+                  src={image||"https://readymadeui.com/images/sunscreen-img-1.webp"}
                   alt="Product"
                   className="w-full  object-cover object-top"
                 />
@@ -148,6 +168,9 @@ const ProductDetailsPage =async ({ params }) => {
 
               <div className="mt-4 flex flex-wrap gap-4">
                 <button
+                onClick={() => {
+                  handleAddToCart(product)
+                }}
                   type="button"
                   className="px-4 py-3 w-[45%] cursor-pointer border border-gray-300 bg-white hover:bg-slate-50 text-slate-900 text-sm font-medium"
                 >
