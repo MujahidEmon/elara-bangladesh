@@ -10,10 +10,10 @@ const Footer = () => {
     return (
         <footer className="bg-[#fcab35]  pt-16 pb-8 px-6 sm:px-6 lg:px-8  border-gray-800">
             <div className="lg:max-w-7xl max-w-sm mx-auto">
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 md:gap-12 gap-4">
+                <div className="md:grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 md:gap-12 gap-4">
 
                     {/* Logo and Social */}
-                    <div className="space-y-1 col-span-2 md:space-y-2 flex flex-col justify-center items-center">
+                    <div className="space-y-1  md:space-y-2 flex flex-col justify-center items-center">
                         <Link href="/" className="inline-block">
                             <Image
                                 src={elogo}
@@ -24,7 +24,7 @@ const Footer = () => {
                             />
                         </Link>
                         <p className="text-white   font-bold uppercase text-xs leading-relaxed">
-                            Committed to Excellence 
+                            Committed to Excellence
                         </p>
 
                         {/* Social Icons */}
@@ -37,8 +37,8 @@ const Footer = () => {
                     </div>
 
                     {/* Quick Links */}
-                    <div>
-                        <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
+                    <div className="hidden lg:block">
+                        <h4 className="text-lg  font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
                             Quick Links
                         </h4>
                         <ul className="space-y-3">
@@ -60,9 +60,9 @@ const Footer = () => {
                     </div>
 
                     {/* Information */}
-                    <div>
+                    <div className="hidden lg:block">
                         <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
-                            Information 
+                            Information
                         </h4>
                         <ul className="space-y-3">
                             {[
@@ -84,8 +84,59 @@ const Footer = () => {
                         </ul>
                     </div>
 
+
+                    {/* for small and medium screens */}
+                    <div className="flex flex-row justify-around items-start my-6 lg:hidden">
+                        <div>
+                            <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
+                                Quick Links
+                            </h4>
+                            <ul className="space-y-3">
+                                {[
+                                    { name: "Home", path: "/" },
+                                    { name: "Products", path: "/allProducts" },
+                                ].map((link, i) => (
+                                    <li key={i}>
+                                        <Link
+                                            href={link.path}
+                                            className="text-black hover:text-primary text-sm transition-colors duration-300 flex items-center"
+                                        >
+                                            <span className="w-1 h-1 bg-gray-500 rounded-full mr-2"></span>
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Information */}
+                        <div>
+                            <h4 className="text-lg font-semibold text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-black">
+                                Information
+                            </h4>
+                            <ul className="space-y-3">
+                                {[
+                                    { name: "About Us", path: "/about" },
+                                    { name: "Terms & Conditions", path: "/TermsAndConditions" },
+                                    { name: "Shipping Policy", path: "/shipping" },
+                                    { name: "Return Policy", path: "/returns" }
+                                ].map((link, i) => (
+                                    <li key={i}>
+                                        <Link
+                                            href={link.path}
+                                            className="text-black hover:text-primary text-sm transition-colors duration-300 flex items-center"
+                                        >
+                                            <span className="w-1 h-1 bg-gray-500 rounded-full mr-2"></span>
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+
                     {/* Contact */}
-                    <div className="col-span-2 flex flex-col items-center">
+                    <div className=" flex flex-col items-center">
                         <h4 className="text-lg font-semibold text-gray-800 mb-2 mt-4 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-black">
                             Contact Us
                         </h4>

@@ -57,6 +57,7 @@ export const decrementFromCart = (id) => {
       cart = cart.map(p =>
         p._id === id ? { ...p, quantity: Number(p.quantity) - 1 } : p
       );
+      toast.success('Decreased quantity');
     } else {
       cart = cart.filter(p => p._id !== id);
       toast.success('Removed from cart');

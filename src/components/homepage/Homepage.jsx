@@ -13,7 +13,6 @@ import DefaultButton from "../shared/DefaultButton/DefaultButton";
 import TestimonialCard from "../TestimonialCard/TestimonialCard";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import bannerImg from '../../../public/109.png'
 
 // Import Swiper styles
 import 'swiper/css';
@@ -28,6 +27,14 @@ import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Timer from "../Timer/Timer";
+
+//Timer
+import { useTimer } from 'react-timer-hook';
+import WeeklyDeals from "../WeeklyDeals/WeeklyDeals";
+
+
+
 
 // Components
 
@@ -93,8 +100,14 @@ export const testimonials = [
 
 
 export default function Home() {
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
 
   const [products, setProducts] = useState([])
+
+
+  //timer functionality
+  
 
 
   useEffect(() => {
@@ -223,50 +236,11 @@ export default function Home() {
 
 
       {/* Weekly Deals Section */}
-      <section className="bg-[#ecedec] w-full rounded-2xl my-24  drop-shadow-2xl/30">
-        <div className="max-w-7xl mx-auto flex md:flex-row flex-col-reverse items-center justify-between  px-4 md:px-0">
-          {/* For TSX uncomment the commented types below */}
-          {/* For TSX uncomment the commented types below */}
-          <div className="space-y-6 w-1/2 text-center flex flex-col items-center">
-            <h1 className="font-semibold text-4xl">Weekly Deals</h1>
-            <p>Don't Miss Out - Gear Up for Victory with This Week's Unmissable Deals!</p>
-            <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
-              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
-                <span className="countdown font-mono md:text-5xl text-2xl">
-                  <span style={{ "--value": 15 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>15</span>
-                </span>
-                days
-              </div>
-              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
-                <span className="countdown font-mono text-5xl">
-                  <span style={{ "--value": 10 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>10</span>
-                </span>
-                hours
-              </div>
-              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
-                <span className="countdown font-mono text-5xl">
-                  <span style={{ "--value": 24 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>24</span>
-                </span>
-                min
-              </div>
-              <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
-                <span className="countdown font-mono text-5xl">
-                  <span style={{ "--value": 59 } /* as React.CSSProperties */} aria-live="polite" aria-label='15'>59</span>
-                </span>
-                sec
-              </div>
-            </div>
-            <DefaultButton text="Shop Now"></DefaultButton>
-          </div>
-          <div className="w-1/2  flex flex-col items-center  justify-center">
-            <Image src={bannerImg} alt="Banner Image" height={250} width={250} className="hover:scale-110  duration-300" />
-          </div>
-        </div>
-      </section>
+      <WeeklyDeals expiryTimestamp={time}></WeeklyDeals>
 
 
       {/*<Ratings /> */}
-      <section className="max-w-7xl my-24 mx-auto">
+      {/* <section className="max-w-7xl my-24 mx-auto">
         <Swiper
           slidesPerView={1}
           spaceBetween={30}
@@ -302,7 +276,7 @@ export default function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </section>
+      </section> */}
 
 
 

@@ -6,11 +6,11 @@ import DefaultButton from "../shared/DefaultButton/DefaultButton";
 const Banner = () => {
   return (
     <section className="md:w-full w-sm mx-auto lg:h-[calc(100vh-69px)]  md:h-[60vh] h-[40vh] bg-white">
-      <div className="max-w-7xl mx-auto h-full flex items-center">
+      <div className="max-w-7xl mx-auto h-full flex justify-between items-center">
 
         {/* LEFT CONTENT */}
         <div className="w-1/2 space-y-3 lg:space-y-6 md:space-y-4">
-          <h1 className="lg:text-5xl md:text-4xl text-3xl font-bold leading-tight">
+          <h1 className="lg:text-5xl md:text-4xl text-2xl font-bold leading-tight">
             The Rise Of Specialized <br />
             Gaming Controllers
           </h1>
