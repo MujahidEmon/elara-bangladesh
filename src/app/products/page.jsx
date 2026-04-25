@@ -1,22 +1,14 @@
 
-import NewProductCard from "@/components/ProductCard/NewProductCard";
-import axios from "axios";
+import ProductGrid from "@/components/ProductPage/ProductGrid";
 import { FiFilter } from "react-icons/fi";
 
-const getAllProducts = async () =>{
-    const {data} = await axios.get('http://localhost:3000/products/api/get-all');
-    return data;
+
+export const metadata = {
+    title: 'All Products',
+    description: 'Explore our extensive collection of electronics, mobile accessories, home appliances, and more at Elara Bangladesh. Find the perfect products to enhance your lifestyle.',
 }
 
-
-const AllProducts = async () => {
-
-    
-    const products = await getAllProducts();
-    console.log(products);
-    // 🔹 Static products array
-    
-
+const AllProducts =  () => {
 
     const categories = [
         {
@@ -103,11 +95,8 @@ const AllProducts = async () => {
                 </div>
             </div>
 
-            {/* Products Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-                {products.map((product, idx) => (
-                    <NewProductCard key={idx} product={product} />
-                ))}
+            <div>
+                <ProductGrid></ProductGrid>
             </div>
         </div>
     );

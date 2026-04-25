@@ -8,6 +8,11 @@ export const GET = async () => {
     const products = await productCollection.find().toArray();
     return Response.json(products);
   } catch (error) {
-    console.log(error);
+    console.error(error);
+
+    return Response.json(
+      { message: "Failed to fetch products" },
+      { status: 500 },
+    ); // ✅ error return (VERY IMPORTANT)
   }
 };

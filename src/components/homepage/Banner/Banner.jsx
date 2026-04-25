@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
-import bannerImg from '../../../public/t109.png'
-import DefaultButton from "../shared/DefaultButton/DefaultButton";
+import bannerImg from './../../../../public/t109.png'
+import DefaultButton from "../../shared/DefaultButton/DefaultButton";
 
 const Banner = () => {
   return (

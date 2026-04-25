@@ -1,46 +1,66 @@
 'use client';
-
-import Image from "next/image";
+const { default: Image } = require("next/image");
+import useLocalCart from "@/services/useLocalCart";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
 
-const ProductCard = ({ product }) => {
-  const { _id, name, price, image } = product;
 
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      transition={{ duration: 0.3 }}
-      className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[260px]"
-    >
-      {/* Image */}
-      <div className="relative w-full h-52">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          className="object-cover"
-        />
-      </div>
+const NewProductCard = ({ product }) => {
+    const { image, productName, price, _id } = product;
+    const {handleAddToCart} = useLocalCart();
+    // <figure className="hover-gallery h-64 object-contain">
 
-      {/* Content */}
-      <div className="p-4 space-y-2">
-        <h2 className="text-lg font-semibold text-gray-800 truncate">
-          {name}
-        </h2>
+    //     <Image height={200} alt="text" width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-1.webp" />
+    //     <Image height={200} alt="text" width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-2.webp" />
+    //     <Image height={200} alt="text" width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-3.webp" />
+    //     <Image height={200} alt="text" width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-4.webp" />
+    // </figure>
+    return (
+        <Link href={`/products/${_id}`}
+            className="bg-white border border-gray-200 max-w-2xs hover:shadow-lg shadow-[#ffdca3] overflow-hidden 
+                 rounded-2xl  transition-all relative"
+        >
+            <div className="">
+                <div
+                    className="aspect-square text-center bg-gray-50 overflow-hidden 
+                     mx-auto rounded-b-2xl"
+                >
+                    <figure className="hover-gallery  object-contain">
 
-        <p className="text-[#FCAB35] font-bold text-xl">
-          ৳ {price}
-        </p>
+                        <Image height={200} alt={productName} width={200} src={image} />
+                        <Image height={200} alt={productName} width={200} src="https://i.ibb.co.com/whXHfKy8/Mini-Flower.jpg" />
+                        <Image height={200} alt={productName} width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-3.webp" />
+                        <Image height={200} alt={productName} width={200} src="https://img.daisyui.com/images/stock/daisyui-hat-4.webp" />
+                    </figure>
+                </div>
+            </div>
 
-        <Link href={`/product/${_id}`}>
-          <button className="mt-2 w-full btn btn-outline border-[#FCAB35] text-[#FCAB35] hover:bg-[#FCAB35] hover:text-white">
-            View Details
-          </button>
+            <div className="p-4">
+                <h3 className="text-sm sm:text-base font-semibold text-slate-900">
+                    {productName}
+                </h3>
+
+                <div className="flex items-center justify-between gap-2 mt-6">
+                    <h4 className="text-sm sm:text-base text-slate-900 font-bold">
+                        {price} Taka
+                    </h4>
+                    <button
+                        onClick={() => {
+                            handleAddToCart(product);
+                        }}
+                        type="button"
+                        className="btn btn-circle bg-gray-100 
+                       flex items-center justify-center rounded-full 
+                       cursor-pointer"
+                        aria-label="Add to Cart"
+                    >
+                        <MdOutlineAddShoppingCart size={20} />
+                    </button>
+
+                </div>
+            </div>
         </Link>
-      </div>
-    </motion.div>
-  );
+    );
 };
 
-export default ProductCard;
+export default NewProductCard;

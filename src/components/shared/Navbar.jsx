@@ -10,13 +10,13 @@ import useLocalCart from "@/services/useLocalCart";
 
 const Navbar = () => {
 
-    const {cartProducts}= useLocalCart();
+    const { cartProducts } = useLocalCart();
     const session = useSession();
     const user = session?.data?.user;
     console.log(session);
     const navItems = [
         { name: "Home", path: "/" },
-        { name: "All Products", path: "/allProducts" },
+        { name: "All Products", path: "/products" },
         { name: "Contact Us", path: "/contact" }
     ]
 
@@ -59,7 +59,7 @@ const Navbar = () => {
                                         ? 'font-semibold bg-[#FCAB35]'
                                         : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
                                     }`}
-                                href={'/allProducts'}>All Products</Link>
+                                href={'/products'}>All Products</Link>
                         </li>
                         <li>
                             <Link
@@ -90,11 +90,11 @@ const Navbar = () => {
                     <li>
                         <Link
                             className={`text-black px-4 py-2 transition duration-300 relative
-                                    ${usePathname() === '/allProducts'
+                                    ${usePathname() === '/products'
                                     ? 'font-semibold bg-[#FCAB35]'
                                     : 'hover:text-[#FCAB35] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#FCAB35] after:w-0 hover:after:w-full after:transition-all after:duration-300'
                                 }`}
-                            href={'/allProducts'}>All Products</Link>
+                            href={'/products'}>All Products</Link>
                     </li>
                     <li>
                         <Link
@@ -147,42 +147,42 @@ const Navbar = () => {
                 </div>
 
                 {
-            //         user ?
-            //             <div className="dropdown dropdown-end">
-            //                 <div
-            //                     tabIndex={0}
-            //                     role="button"
-            //                     className="btn btn-ghost ml-4 btn-circle avatar"
-            //                 >
-            //                     <div className="w-10 rounded-full">
-            //                         <Image
-            //                             alt="Tailwind CSS Navbar component"
-            //                             href={user ? user?.photoURL : "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
-            //                         />
-            //                     </div>
-            //                 </div>
-            //                 <ul
-            //                     tabIndex={0}
-            //                     className="menu menu-sm dropdown-content bg-base-200 rounded-sm z-1 mt-3 w-36 p-2 shadow"
-            //                 >
-            //                     {/* <li>  
-            //   <a className="justify-between">
-            //     Profile
-            //     <span className="badge">New</span>
-            //   </a>
-            // </li>
-            // <li>
-            //   <a>Settings</a>
-            // </li> */}
-            //                     {/* <h1 className="font-semibold lg:flex hidden mr-3">{user?.displayName}</h1> */}
-            //                     <li>
-            //                         {user ? <button className="text-black text-base font-semibold px-2 py-2  transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-0 hover:after:w-full after:transition-all after:duration-300" >Logout</button> : <Link href={'/login'}>Login</Link>}
-            //                     </li>
-            //                 </ul>
-            //             </div>
+                    //         user ?
+                    //             <div className="dropdown dropdown-end">
+                    //                 <div
+                    //                     tabIndex={0}
+                    //                     role="button"
+                    //                     className="btn btn-ghost ml-4 btn-circle avatar"
+                    //                 >
+                    //                     <div className="w-10 rounded-full">
+                    //                         <Image
+                    //                             alt="Tailwind CSS Navbar component"
+                    //                             href={user ? user?.photoURL : "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+                    //                         />
+                    //                     </div>
+                    //                 </div>
+                    //                 <ul
+                    //                     tabIndex={0}
+                    //                     className="menu menu-sm dropdown-content bg-base-200 rounded-sm z-1 mt-3 w-36 p-2 shadow"
+                    //                 >
+                    //                     {/* <li>  
+                    //   <a className="justify-between">
+                    //     Profile
+                    //     <span className="badge">New</span>
+                    //   </a>
+                    // </li>
+                    // <li>
+                    //   <a>Settings</a>
+                    // </li> */}
+                    //                     {/* <h1 className="font-semibold lg:flex hidden mr-3">{user?.displayName}</h1> */}
+                    //                     <li>
+                    //                         {user ? <button className="text-black text-base font-semibold px-2 py-2  transition duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-0 hover:after:w-full after:transition-all after:duration-300" >Logout</button> : <Link href={'/login'}>Login</Link>}
+                    //                     </li>
+                    //                 </ul>
+                    //             </div>
 
-            //             :
-                        user?<button className="btn " onClick={() => signOut()}>Logout</button>:
+                    //             :
+                    user ? <button className="btn " onClick={() => signOut()}>Logout</button> :
                         <DefaultButton text="Login" href="login"></DefaultButton>
 
                 }

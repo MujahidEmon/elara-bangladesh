@@ -2,16 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { HashLoader } from "react-spinners";
-import ProductCard from "../ProductCard/ProductCard";
-import Banner from "../Banner/Banner";
+import Banner from "./Banner/Banner";
 import FeaturedCategories from "../FeaturedCategories/FeaturedCategories";
 import PromoSection from "../FeaturedCategories/promo";
-import NewProductCard from "../ProductCard/NewProductCard";
+import NewProductCard from "../ProductCard/ProductCard";
 import DefaultButton from "../shared/DefaultButton/DefaultButton";
-import TestimonialCard from "../TestimonialCard/TestimonialCard";
-import { Swiper, SwiperSlide } from 'swiper/react';
+
 
 
 // Import Swiper styles
