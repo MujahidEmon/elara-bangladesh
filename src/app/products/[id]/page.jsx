@@ -1,7 +1,9 @@
   'use client';
+import ProductDetailsSkeleton from "@/components/ProductCard/ProductDetailsSkeleton";
   import DefaultButton from "@/components/shared/DefaultButton/DefaultButton";
   import { getProductById } from "@/services/getProducts";
   import useLocalCart from "@/services/useLocalCart";
+import { useQuery } from "@tanstack/react-query";
   import Image from "next/image";
   import { useParams } from "next/navigation";
   import React, { useEffect, useState } from "react";
@@ -9,25 +11,31 @@
   const ProductDetailsPage = () => {
     const { handleAddToCart } = useLocalCart();
     const params = useParams();
-    const [product, setProduct] = useState({});
-    const [loading, setLoading] = useState(false);
-    const loadProduct = async ({ params }) => {
-      setLoading(true);
-      const id = params?.id;
-      const p = await getProductById(id);
-      setProduct(p);
-      setLoading(false);
-    }
+    // const [product, setProduct] = useState({});
+    // const [loading, setLoading] = useState(false);
+    // const loadProduct = async ({ params }) => {
+    //   setLoading(true);
+    //   const id = params?.id;
+    //   const p = await getProductById(id);
+    //   setProduct(p);
+    //   setLoading(false);
+    // }
 
-    useEffect(() => {
-      loadProduct({ params });
-    }, [params])
+    const {data: product = {}, isLoading, isError} = useQuery({
+      queryKey : ['product', params?.id],
+      queryFn: getProductById(params?.id),
+      enabled: !!params?.id
+    })
+
+    // useEffect(() => {
+    //   loadProduct({ params });
+    // }, [params])
 
     console.log(product);
 
     const { image, price, productName, category, description, _id } = product;
 
-    if (loading) return <p className="h-[calc(100vh-69px)] flex items-center justify-center text-4xl font-bold">Loading...</p>;
+    if (isLoading) return <ProductDetailsSkeleton></ProductDetailsSkeleton>
     return (
       <div className="p-4  bg-gray-100">
         <div className="lg:max-w-7xl md:max-w-2xl max-w-sm mx-auto">
