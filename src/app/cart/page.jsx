@@ -92,7 +92,7 @@ const ProductCart = () => {
               </button>
             </Link>
 
-            <Link href="/allProducts">
+            <Link href="/products">
               <button className="text-sm px-4 py-2.5 w-full font-semibold hover:border-amber-950 cursor-pointer tracking-wide border border-slate-300 rounded-md">
                 Continue Shopping
               </button>

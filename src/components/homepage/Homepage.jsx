@@ -109,7 +109,8 @@ export default function Home() {
   useEffect(() => {
     const getAllProducts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/products/api/get-all");
+        const { data } = await axios.get("http://localhost:3000/api/products");
+        console.log(data);
         setProducts(data);
       } catch (error) {
         console.log(error);
