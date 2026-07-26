@@ -1,7 +1,11 @@
 "use client";
+import AppLoader from "@/components/shared/AppLoader";
 import { getProductById } from "@/services/getProducts";
+import axios from "axios";
+import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
     const params = useParams();
@@ -10,25 +14,34 @@ export default function CheckoutPage() {
     const [upozilas, setUpozilas] = useState([]);
     const [upozila, setUpozila] = useState([]);
     const [product, setProduct] = useState([])
+    const [isProductLoading, setIsProductLoading] = useState(true);
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+    const [completedOrder, setCompletedOrder] = useState(null);
     const distWithDhakaCity = [{ id: 0, name: 'Dhaka City' }, ...districts];
     
 
 
 
     //product related functions
-    const loadProduct = async() => {
-        const data = await getProductById(params.id);
-        const {_id, ...rest} = data;
-        setProduct({productId: data?._id, ...rest});
-    }
+    const loadProduct = useCallback(async () => {
+        try {
+            setIsProductLoading(true);
+            const data = await getProductById(params.id);
+            const { _id, ...rest } = data;
+            setProduct({ productId: data?._id, ...rest });
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to load product");
+        } finally {
+            setIsProductLoading(false);
+        }
+    }, [params.id])
 
     // Load product on component mount
     useEffect(() => {
         loadProduct();
-    }, [params.id]);
-    console.log(product);
-
-    const {price, productName} = product;
+    }, [loadProduct]);
+    const {price} = product;
 
 
 
@@ -65,33 +78,39 @@ export default function CheckoutPage() {
         e.preventDefault();
 
         const form = e.target;
+        setIsPlacingOrder(true);
 
         const orderData = {
             name: form.name.value,
             phone: form.phone.value,
             address: form.address.value,
-            note: form.note.value,
+            note: form.note?.value || "",
             paymentMethod: "COD",
             district: district?.name || '',
             thana: upozila?.name || '',
+            shippingCharge: district?.name === 'Dhaka City' ? 70 : 130,
+            totalPrice: Number(price || 0) + (district?.name === 'Dhaka City' ? 70 : 130),
             productDetails: product,
         };
 
-        console.log("Order Data:", orderData);
-
-        /*
-            const res = await fetch("/api/orders", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(orderData),
-            });
-        
-            const data = await res.json();
-            */
-
-        alert("Order placed successfully!");
-        form.reset();
+        try {
+            const { data } = await axios.post("/api/orders", orderData);
+            toast.success("Order placed successfully!");
+            setCompletedOrder(data.order);
+            form.reset();
+            setDistrict([]);
+            setUpozila([]);
+        } catch (error) {
+            console.error(error);
+            toast.error(error?.response?.data?.message || "Failed to place order");
+        } finally {
+            setIsPlacingOrder(false);
+        }
     };
+
+    if (isProductLoading) {
+        return <AppLoader className="min-h-[70vh]" label="Loading checkout" />;
+    }
 
     return (
         <div>
@@ -215,9 +234,10 @@ export default function CheckoutPage() {
                                         <div className="sm:col-span-2">
                                             <button
                                                 type="submit"
+                                                disabled={isPlacingOrder}
                                                 className="w-full flex items-center justify-center gap-3 rounded-lg bg-[#FCAB35] px-6 py-3 text-white text-lg font-semibold hover:bg-[#fcac35dd] transition"
                                             >
-                                                Place Order
+                                                {isPlacingOrder ? "Placing Order..." : "Place Order"}
                                             </button>
                                         </div>
                                     </div>
@@ -275,6 +295,61 @@ export default function CheckoutPage() {
                     </div>
                 </form>
             </section>
+            {completedOrder && (
+                <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 px-4">
+                    <div className="w-full max-w-xl rounded-2xl bg-white p-6 text-slate-900 shadow-2xl">
+                        <div className="rounded-xl bg-[#fff7ea] p-4">
+                            <p className="text-sm font-bold uppercase tracking-wide text-[#FCAB35]">Order placed successfully</p>
+                            <h2 className="mt-2 text-2xl font-bold">Keep your order number safe</h2>
+                            <p className="mt-2 text-sm leading-6 text-slate-600">
+                                You will need this order number to track your delivery status later.
+                            </p>
+                            <div className="mt-4 rounded-lg bg-white px-4 py-3 text-center text-2xl font-extrabold tracking-wide text-slate-950">
+                                {completedOrder.orderNumber}
+                            </div>
+                        </div>
+
+                        <div className="mt-5 space-y-3 text-sm">
+                            <div className="flex justify-between gap-4">
+                                <span className="text-slate-500">Customer</span>
+                                <span className="text-right font-semibold">{completedOrder.name}</span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                                <span className="text-slate-500">Phone</span>
+                                <span className="text-right font-semibold">{completedOrder.phone}</span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                                <span className="text-slate-500">Product</span>
+                                <span className="text-right font-semibold">{completedOrder.productDetails?.productName || completedOrder.productDetails?.name || "Product"}</span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                                <span className="text-slate-500">Payment</span>
+                                <span className="text-right font-semibold">{completedOrder.paymentMethod}</span>
+                            </div>
+                            <div className="flex justify-between gap-4 border-t border-slate-100 pt-3">
+                                <span className="text-slate-500">Total</span>
+                                <span className="text-right text-lg font-bold text-[#FCAB35]">BDT {completedOrder.totalPrice}</span>
+                            </div>
+                        </div>
+
+                        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                            <Link
+                                href={`/track/order/${completedOrder.orderNumber}`}
+                                className="inline-flex items-center justify-center rounded-lg bg-[#FCAB35] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#e89a2c]"
+                            >
+                                Track Order
+                            </Link>
+                            <button
+                                type="button"
+                                onClick={() => setCompletedOrder(null)}
+                                className="inline-flex items-center justify-center rounded-lg border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+                            >
+                                Continue Shopping
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 

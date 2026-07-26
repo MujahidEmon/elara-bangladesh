@@ -171,7 +171,7 @@ const Footer = () => {
                     </p>
 
                     <div className="flex space-x-6">
-                        <Link href="/TermsAndConditions" className="text-white font-semibold hover:text-primary text-sm">
+                        <Link href="https://mujahidemon.vercel.app" target="_blank" className="text-white font-semibold hover:text-primary text-sm">
                             Developed By Mujahid Emon
                         </Link>
                     </div>

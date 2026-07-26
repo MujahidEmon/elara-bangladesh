@@ -1,249 +1,570 @@
 'use client';
-import ProductDetailsSkeleton from "@/components/ProductCard/ProductDetailsSkeleton";
+
+import AppLoader from "@/components/shared/AppLoader";
 import DefaultButton from "@/components/shared/DefaultButton/DefaultButton";
 import { getProductById } from "@/services/getProducts";
 import useLocalCart from "@/services/useLocalCart";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import toast from "react-hot-toast";
+import { FaRegStar, FaStar, FaTruckFast } from "react-icons/fa6";
+import { FiMinus, FiPlus, FiSearch, FiShield, FiShoppingCart } from "react-icons/fi";
+import { MdOutlineAssignmentReturn, MdOutlinePayments } from "react-icons/md";
+
+const sectionTitles = ["Key Features", "Specifications", "Benefits", "Why Choose"];
+
+const formatPrice = (value) => {
+  if (!value) return "Price unavailable";
+  return `${Number(value).toLocaleString("en-BD")} Taka`;
+};
+
+const buildDescriptionSections = (description = "") => {
+  const lines = description
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const intro = [];
+  const sections = [];
+  let activeSection = null;
+
+  lines.forEach((line) => {
+    const matchedTitle = sectionTitles.find((title) => line.startsWith(title));
+
+    if (matchedTitle) {
+      activeSection = {
+        title: matchedTitle === "Why Choose" ? line.replace("?", "") : matchedTitle,
+        items: [],
+      };
+      sections.push(activeSection);
+      return;
+    }
+
+    if (activeSection) {
+      activeSection.items.push(line);
+      return;
+    }
+
+    intro.push(line);
+  });
+
+  return { intro, sections };
+};
 
 const ProductDetailsPage = () => {
   const { handleAddToCart } = useLocalCart();
   const params = useParams();
+  const [selectedImage, setSelectedImage] = useState("");
+  const [activeTab, setActiveTab] = useState("description");
+  const [quantity, setQuantity] = useState(1);
+  const [reviewPhone, setReviewPhone] = useState("");
+  const [verifiedOrder, setVerifiedOrder] = useState(null);
+  const [isVerifyingOrder, setIsVerifyingOrder] = useState(false);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
-  const { data: product = {}, isLoading, isError } = useQuery({
-    queryKey: ['product', params?.id],
-    queryFn:() => getProductById(params?.id),
-    enabled: !!params?.id
-  })
+  const {
+    data: product = {},
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["product", params?.id],
+    queryFn: () => getProductById(params?.id),
+    enabled: !!params?.id,
+  });
 
-  // console.log(product, params);    
-  const { image, price, productName, category, description, _id } = product;
+  const {
+    data: reviews = [],
+    refetch: refetchReviews,
+  } = useQuery({
+    queryKey: ["reviews", params?.id],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/reviews", {
+        params: { productId: params?.id },
+      });
+      return data;
+    },
+    enabled: !!params?.id,
+  });
 
-  if (isLoading) return <ProductDetailsSkeleton></ProductDetailsSkeleton>
+  const {
+    image,
+    price,
+    productName,
+    category,
+    description,
+    _id,
+    brand,
+    gallery = [],
+    offerPrice,
+    regularPrice,
+    salePrice,
+    shortDescription,
+    sku,
+    stock,
+    tags = [],
+  } = product;
+
+  const images = useMemo(() => {
+    return [image, ...gallery].filter(Boolean);
+  }, [image, gallery]);
+
+  const currentImage = selectedImage || images[0];
+  const { intro, sections } = useMemo(
+    () => buildDescriptionSections(description),
+    [description]
+  );
+  const displayPrice = offerPrice || salePrice || price;
+  const hasDiscount = regularPrice && displayPrice && regularPrice > displayPrice;
+  const discountPercent = hasDiscount
+    ? Math.round(((regularPrice - displayPrice) / regularPrice) * 100)
+    : 0;
+  const averageRating = reviews.length
+    ? reviews.reduce((total, review) => total + Number(review.rating || 0), 0) / reviews.length
+    : 0;
+  const roundedAverageRating = averageRating.toFixed(1);
+
+  const handleVerifyOrder = async (event) => {
+    event.preventDefault();
+
+    if (!reviewPhone.trim()) {
+      toast.error("Please enter your order phone number");
+      return;
+    }
+
+    try {
+      setIsVerifyingOrder(true);
+      const { data } = await axios.post("/api/orders/verify", {
+        phone: reviewPhone,
+        productId: params?.id,
+      });
+
+      if (!data.eligible) {
+        setVerifiedOrder(null);
+        toast.error(data.message || "No matching order found");
+        return;
+      }
+
+      setVerifiedOrder(data);
+      toast.success(data.message || "Order verified");
+    } catch (error) {
+      setVerifiedOrder(null);
+      toast.error(error?.response?.data?.message || "Failed to verify order");
+    } finally {
+      setIsVerifyingOrder(false);
+    }
+  };
+
+  const handleReviewSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!verifiedOrder?.orderId) {
+      toast.error("Please verify your order first");
+      return;
+    }
+
+    const form = event.target;
+    const reviewData = {
+      productId: params?.id,
+      orderId: verifiedOrder.orderId,
+      phone: reviewPhone,
+      name: form.name.value,
+      rating: form.rating.value,
+      comment: form.comment.value,
+    };
+
+    try {
+      setIsSubmittingReview(true);
+      await axios.post("/api/reviews", reviewData);
+      toast.success("Review submitted successfully");
+      form.reset();
+      setReviewPhone("");
+      setVerifiedOrder(null);
+      refetchReviews();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to submit review");
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
+
+  if (isLoading) return <AppLoader className="min-h-[70vh]" label="Loading product" />;
+
+  if (isError) {
+    return (
+      <main className="bg-gray-50 px-4 py-16">
+        <div className="mx-auto max-w-3xl rounded-lg border border-red-100 bg-white p-8 text-center shadow-sm">
+          <h1 className="text-2xl font-bold text-slate-900">Product could not be loaded</h1>
+          <p className="mt-3 text-sm text-slate-500">
+            Please refresh the page or try again after a moment.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <div className="p-4  bg-gray-100">
-      <div className="lg:max-w-7xl md:max-w-2xl max-w-sm mx-auto">
-        <div className="flex flex-col md:flex-row gap-8">
+    <main className="bg-white">
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr]">
+          <div className="grid gap-4 sm:grid-cols-[82px_1fr]">
+            <div className="order-2 flex gap-3 overflow-x-auto sm:order-1 sm:flex-col">
+              {images.map((item, index) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setSelectedImage(item)}
+                  className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-md border bg-gray-50 transition ${
+                    currentImage === item ? "border-[#FCAB35]" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                  aria-label={`View product image ${index + 1}`}
+                >
+                  <Image
+                    src={item}
+                    alt={`${productName || "Product"} thumbnail ${index + 1}`}
+                    fill
+                    sizes="80px"
+                    className="object-contain p-2"
+                  />
+                </button>
+              ))}
+            </div>
 
-
-          <div className="md:w-2/5 w-full  top-0">
-
-            {/* Images */}
-            <div className="flex flex-col gap-4">
-              {/* main image */}
-              <div >
-                <Image
-                  height={300}
-                  width={300}
-                  src={image || "https://readymadeui.com/images/sunscreen-img-1.webp"}
-                  alt="Product"
-                  className="w-full md:h-[500px] object-cover aspect-square rounded-2xl"
-                />
-              </div>
-
-              {/* gallery images */}
-              <div className="bg-white rounded-xl shadow-sm p-2 w-full max-w-full overflow-auto">
-                <div className="flex justify-between flex-row gap-4 shrink-0">
+            <div className="order-1 overflow-hidden rounded-lg border border-gray-100 bg-gray-50 sm:order-2">
+              <div className="relative aspect-square">
+                {currentImage && (
                   <Image
-                    height={450}
-                    width={650}
-                    src="https://readymadeui.com/images/sunscreen-img-1.webp"
-                    alt="Product1"
-                    className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-black"
+                    src={currentImage}
+                    alt={productName || "Product image"}
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 560px, 100vw"
+                    className="object-contain p-6"
                   />
-                  <Image
-                    height={450}
-                    width={650}
-                    src="https://readymadeui.com/images/sunscreen-img-2.webp"
-                    alt="Product2"
-                    className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                  />
-                  <Image
-                    height={450}
-                    width={650}
-                    src="https://readymadeui.com/images/sunscreen-img-3.webp"
-                    alt="Product3"
-                    className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                  />
-                  <Image
-                    height={450}
-                    width={650}
-                    src="https://readymadeui.com/images/sunscreen-img-4.webp"
-                    alt="Product4"
-                    className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                  />
-                  <Image
-                    height={450}
-                    width={650}
-                    src="https://readymadeui.com/images/sunscreen-img-5.webp"
-                    alt="Product5"
-                    className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                  />
-                  <Image
-                    height={450}
-                    width={650}
-                    src="https://readymadeui.com/images/sunscreen-img-6.webp"
-                    alt="Product6"
-                    className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                  />
-                </div>
+                )}
+                <button
+                  type="button"
+                  className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-700 shadow-sm"
+                  aria-label="Zoom product image"
+                >
+                  <FiSearch size={17} />
+                </button>
               </div>
             </div>
           </div>
 
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#FCAB35]">
+              {brand || category || "Elara Bangladesh"}
+            </p>
+            <h1 className="mt-2 max-w-2xl text-2xl font-bold leading-snug text-slate-950 md:text-3xl">
+              {productName}
+            </h1>
 
-
-          <div className="md:w-3/5 w-full">
-            <div>
-              <h3 className="text-lg sm:text-4xl font-bold text-slate-900">{productName}</h3>
-
-              <div className="flex items-center gap-3 mt-2">
-                <div className="flex items-center gap-1">
-                  <p className="text-base text-slate-500">4</p>
-
-                  <svg className="w-3.5 h-3.5 fill-[#fcab35]" viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-
-                  <svg className="w-3.5 h-3.5 fill-[#fcab35]" viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-
-                  <svg className="w-3.5 h-3.5 fill-[#fcab35]" viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-
-                  <svg className="w-3.5 h-3.5 fill-[#fcab35]" viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-
-                  <svg className="w-3.5 h-3.5 fill-[#CED5D8]" viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-                </div>
-
-                <span className="text-slate-500">|</span>
-                <p className="text-sm text-slate-500">76 Ratings</p>
-                <span className="text-slate-500">|</span>
-                <p className="text-sm text-slate-500">50 Reviews</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3 border-y border-gray-200 py-4">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, index) => (
+                  <FaStar key={index} className="text-[#FCAB35]" size={14} />
+                ))}
               </div>
-
-              <div className="mt-4">
-                <p className="text-slate-500 mt-1 text-sm">
-                  {description}
-                </p>
-              </div>
-
-              <div className="flex items-center flex-wrap gap-2 mt-6">
-                {/* <p className="text-slate-500 text-base"><s>$16</s></p> */}
-                <h4 className="text-[#fcab35] text-2xl sm:text-3xl font-semibold">{price}Taka</h4>
-                <div className="flex py-1 px-2 bg-[#fcab35] font-semibold ml-4!">
-                  <span className="text-white text-sm">save 10%</span>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-base mt-4 text-slate-500 font-semibold">Net Wt: 100G</h4>
-              </div>
+              <span className="text-sm font-medium text-slate-700">{roundedAverageRating}</span>
+              <span className="text-sm text-slate-400">|</span>
+              <button
+                type="button"
+                onClick={() => setActiveTab("reviews")}
+                className="text-sm font-medium text-slate-600 hover:text-[#FCAB35]"
+              >
+                Reviews ({reviews.length})
+              </button>
+              {stock > 0 && (
+                <>
+                  <span className="text-sm text-slate-400">|</span>
+                  <span className="text-sm font-medium text-emerald-600">{stock} in stock</span>
+                </>
+              )}
             </div>
 
-            <hr className="my-6 border-gray-300" />
+            <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-600">
+              {shortDescription || intro[1] || description}
+            </p>
 
-            <div>
-              <div className="flex gap-4 items-center border border-gray-300 bg-white px-4 py-2.5 w-max">
-                <button type="button" className="border-0 outline-0 cursor-pointer">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5" viewBox="0 0 121.805 121.804">
-                    <path d="M7.308 68.211h107.188a7.309 7.309 0 0 0 7.309-7.31 7.308 7.308 0 0 0-7.309-7.309H7.308a7.31 7.31 0 0 0 0 14.619z" />
-                  </svg>
-                </button>
+            <div className="mt-6 flex flex-wrap items-end gap-3">
+              <p className="text-3xl font-bold text-slate-950">{formatPrice(displayPrice)}</p>
+              {hasDiscount && (
+                <>
+                  <p className="pb-1 text-base text-slate-400 line-through">
+                    {formatPrice(regularPrice)}
+                  </p>
+                  <span className="mb-1 rounded bg-[#FCAB35] px-2.5 py-1 text-xs font-bold text-white">
+                    Save {discountPercent}%
+                  </span>
+                </>
+              )}
+            </div>
 
-                <span className="text-slate-900 text-sm font-semibold px-6 block">1</span>
-
-                <button type="button" className="border-0 outline-0 cursor-pointer">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5" viewBox="0 0 512 512">
-                    <path d="M256 509.892c-19.058 0-34.5-15.442-34.5-34.5V36.608c0-19.058 15.442-34.5 34.5-34.5s34.5 15.442 34.5 34.5v438.784c0 19.058-15.442 34.5-34.5 34.5z" />
-                    <path d="M475.392 290.5H36.608c-19.058 0-34.5-15.442-34.5-34.5s15.442-34.5 34.5-34.5h438.784c19.058 0 34.5 15.442 34.5 34.5s-15.442 34.5-34.5 34.5z" />
-                  </svg>
-                </button>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="flex h-11 items-center overflow-hidden rounded border border-gray-300 bg-white">
                 <button
-                  onClick={() => {
-                    handleAddToCart(product)
-                  }}
                   type="button"
-                  className="px-4 py-3 w-[45%] cursor-pointer border border-gray-300 bg-white hover:bg-slate-50 text-slate-900 text-sm font-medium"
+                  onClick={() => setQuantity((current) => Math.max(1, current - 1))}
+                  className="flex h-full w-10 items-center justify-center text-slate-700 hover:bg-gray-50"
+                  aria-label="Decrease quantity"
                 >
-                  Add to cart
+                  <FiMinus size={15} />
                 </button>
-
-                {/* <button
-                    type="button"
-                    className="px-4 py-3 w-[45%] cursor-pointer border border-purple-600 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium"
-                  >
-                    Buy it now
-                  </button> */}
-                <DefaultButton href={`/checkout/${_id}`} text="Buy Now"></DefaultButton>
+                <span className="w-12 text-center text-sm font-semibold text-slate-900">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((current) => Math.min(stock || 99, current + 1))}
+                  className="flex h-full w-10 items-center justify-center text-slate-700 hover:bg-gray-50"
+                  aria-label="Increase quantity"
+                >
+                  <FiPlus size={15} />
+                </button>
               </div>
+
+              <button
+                onClick={() => handleAddToCart(product)}
+                type="button"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded border border-[#FCAB35] bg-white px-5 text-sm font-bold text-[#FCAB35] transition hover:bg-[#fff7ea]"
+              >
+                <FiShoppingCart size={17} />
+                Add to Cart
+              </button>
+
+              <DefaultButton href={`/checkout/${_id}`} text="Buy Now" />
             </div>
 
-            <hr className="my-6 border-gray-300" />
+            <div className="mt-6 grid gap-3 border-y border-gray-200 py-5 text-sm text-slate-600 sm:grid-cols-2">
+              <p>
+                <span className="font-semibold text-slate-900">Category:</span> {category || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold text-slate-900">SKU:</span> {sku || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold text-slate-900">Brand:</span> {brand || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold text-slate-900">Status:</span>{" "}
+                {stock > 0 ? "Available" : "Out of stock"}
+              </p>
+            </div>
 
-            {/* <div>
-                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Select Delivery Location</h3>
-                <p className="text-slate-500 text-sm mt-2">Enter the pincode of your area to check product availability.</p>
-
-                <div className="flex items-center gap-2 mt-6 max-w-sm">
-                  <input
-                    type="number"
-                    placeholder="Enter pincode"
-                    className="bg-white px-4 py-2.5 text-sm w-full border border-gray-300 outline-0"
-                  />
-                  <button
-                    type="button"
-                    className="border border-purple-600 outline-0 bg-purple-600 hover:bg-purple-700 text-white cursor-pointer px-4 py-2.5 text-sm"
-                  >
-                    Apply
-                  </button>
+            <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+              {[
+                { icon: FaTruckFast, label: "Fast Delivery" },
+                { icon: MdOutlinePayments, label: "COD Available" },
+                { icon: MdOutlineAssignmentReturn, label: "Easy Return" },
+                { icon: FiShield, label: "Quality Checked" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-lg border border-gray-100 bg-gray-50 p-3 text-center">
+                  <item.icon className="mx-auto text-[#FCAB35]" size={22} />
+                  <p className="mt-2 text-xs font-semibold text-slate-700">{item.label}</p>
                 </div>
-              </div> */}
-
-            <div className="flex justify-between gap-4 mt-8">
-              <div className="text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 fill-[#fcab35] inline" viewBox="0 0 64 64">
-                  <g>
-                    <path d="M59.89 13.36 49.73 7.495a4.21 4.21 0 0 0-4.2 0l-10.163 5.867A4.213 4.213 0 0 0 33.267 17v11.733a4.213 4.213 0 0 0 2.1 3.637L45.53 38.24a4.217 4.217 0 0 0 4.2 0l10.161-5.867a4.213 4.213 0 0 0 2.1-3.637V17a4.212 4.212 0 0 0-2.1-3.64zm-1.5 15.372a.6.6 0 0 1-.3.52L47.931 35.12a.62.62 0 0 1-.26.07V24.697a2.4 2.4 0 0 0-1.125-2.031l-9.56-6.008a.593.593 0 0 1 .181-.18l10.163-5.866a.592.592 0 0 1 .299-.08.607.607 0 0 1 .3.08l10.161 5.865a.6.6 0 0 1 .3.521zm-4.07 16.024H42.452a5.977 5.977 0 0 0-.583-2.565 5.581 5.581 0 0 0-3.348-2.926l-9.75-3.084a6.558 6.558 0 0 0-4.028.017l-8.899 2.882a4.2 4.2 0 0 0-3.797-2.433H6.21a4.2 4.2 0 0 0-4.2 4.2v15.73a4.2 4.2 0 0 0 4.2 4.2h5.838a4.192 4.192 0 0 0 3.96-2.858h6.75a1.92 1.92 0 0 1 .815.193l7.331 3.006a11.425 11.425 0 0 0 7.649.353l15.76-4.81a7.12 7.12 0 0 0 4.835-6.96 4.93 4.93 0 0 0-4.827-4.945zM12.647 56.578a.6.6 0 0 1-.6.6H6.21a.6.6 0 0 1-.6-.6V40.852a.6.6 0 0 1 .6-.6h5.838a.6.6 0 0 1 .6.6zm40.518-3.324-15.663 4.778a7.84 7.84 0 0 1-5.233-.24l-7.262-2.974a5.428 5.428 0 0 0-2.247-.498h-6.515V42.74l9.6-3.12a2.98 2.98 0 0 1 1.83-.008l9.749 3.084a2.009 2.009 0 0 1 1.2 1.07 2.407 2.407 0 0 1 .089 1.894 1.966 1.966 0 0 1-2.064 1.338l-8.572-1.2a1.8 1.8 0 0 0-.502 3.565l8.573 1.2a5.406 5.406 0 0 0 5.152-2.209h13.02a1.334 1.334 0 0 1 1.231 1.417c0 .047 0 .094.006.14a3.445 3.445 0 0 1-2.392 3.343zM21.62 32.167a1.8 1.8 0 0 0 1.8-1.8V29a1.578 1.578 0 0 0 .227-.022 5.214 5.214 0 0 0-.36-10.416h-3.058a1.628 1.628 0 0 1-.01-3.257h5.89a1.8 1.8 0 0 0 0-3.6h-2.69v-1.356a1.8 1.8 0 0 0-3.6 0v1.395a5.202 5.202 0 0 0 .048 10.38 1.81 1.81 0 0 0 .36.036h3.054a1.627 1.627 0 1 1 0 3.254H16.52a1.8 1.8 0 0 0 0 3.6h3.3v1.357a1.8 1.8 0 0 0 1.8 1.796z" />
-                  </g>
-                </svg>
-                <p className="text-slate-500 text-xs sm:text-sm mt-3">COD available</p>
-              </div>
-
-              <div className="text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 fill-[#fcab35] inline" viewBox="0 0 100 100">
-                  <path d="M98 50c0 26.467-21.533 48-48 48S2 76.467 2 50c0-1.658 1.342-3 3-3s3 1.342 3 3c0 23.159 18.841 42 42 42s42-18.841 42-42S73.159 8 50 8c-11.163 0-21.526 4.339-29.322 12H32c1.658 0 3 1.342 3 3s-1.342 3-3 3H14c-1.658 0-3-1.342-3-3V5c0-1.658 1.342-3 3-3s3 1.342 3 3v10.234C25.851 6.786 37.481 2 50 2c26.467 0 48 21.533 48 48zM77 38v27c0 1.251-.776 2.37-1.945 2.81l-24 9a3.04 3.04 0 0 1-2.11 0l-24-9A3.003 3.003 0 0 1 23 65V38c0-1.251.776-2.37 1.945-2.81l24-9a3.036 3.036 0 0 1 2.109 0l24 9A3.002 3.002 0 0 1 77 38zm-42.457 0L50 43.795 65.457 38 50 32.205zM29 62.92l18 6.75V49.08l-18-6.75zm42 0V42.33l-18 6.75v20.59z" />
-                </svg>
-                <p className="text-slate-500 text-xs sm:text-sm mt-3">15-Day Return Policy</p>
-              </div>
-
-              <div className="text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 fill-[#fcab35] inline" viewBox="0 0 32 32">
-                  <g>
-                    <path d="m31.385 15.434-3.33-5.55a1.11 1.11 0 0 0-.955-.544h-6.66V8.23a1.11 1.11 0 0 0-1.11-1.11h-2.22a1.11 1.11 0 0 0 0 2.22h1.11v13.32h-7.837a3.863 3.863 0 0 0-5.416 0H2.68v-5.55a1.11 1.11 0 0 0-2.22 0v6.66a1.11 1.11 0 0 0 1.11 1.11h2.276a4.44 4.44 0 0 0 0 .555 3.885 3.885 0 0 0 7.77 0 4.44 4.44 0 0 0-.056-.555h8.991a4.44 4.44 0 0 0-.056.555 3.885 3.885 0 0 0 7.77 0 4.44 4.44 0 0 0-.055-.555h2.22a1.11 1.11 0 0 0 1.11-1.11V16a1.11 1.11 0 0 0-.155-.566zm-2.92-.544H24.88v-3.33h1.587zM7.675 27.1a1.665 1.665 0 1 1 1.665-1.665A1.665 1.665 0 0 1 7.675 27.1zm16.65 0a1.665 1.665 0 1 1 1.665-1.665 1.665 1.665 0 0 1-1.665 1.665zm2.708-4.44a3.863 3.863 0 0 0-5.416 0H20.44v-11.1h2.22V16a1.11 1.11 0 0 0 1.11 1.11h5.55v1.11h-1.11a1.11 1.11 0 0 0 0 2.22h1.11v2.22z" />
-                    <path d="M7.12 16A6.66 6.66 0 1 0 .46 9.34 6.66 6.66 0 0 0 7.12 16zm0-11.1a4.44 4.44 0 1 1-4.44 4.44A4.44 4.44 0 0 1 7.12 4.9z" />
-                    <path d="M7.12 10.45h2.22a1.11 1.11 0 0 0 0-2.22H8.23V7.12a1.11 1.11 0 0 0-2.22 0v2.22a1.11 1.11 0 0 0 1.11 1.11z" />
-                  </g>
-                </svg>
-                <p className="text-slate-500 text-xs sm:text-sm mt-3">Free Delivery On Orders Above $100</p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
+      </section>
 
-export default ProductDetailsPage;  
+      <section className="border-t border-gray-200">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="flex border-b border-gray-200">
+            {[
+              { id: "description", label: "Description" },
+              { id: "reviews", label: `Reviews (${reviews.length})` },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`border-b-2 px-5 py-3 text-xs font-bold uppercase transition ${
+                  activeTab === tab.id
+                    ? "border-[#FCAB35] text-[#FCAB35]"
+                    : "border-transparent text-slate-500 hover:text-slate-900"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {activeTab === "description" ? (
+            <div className="py-7">
+              <h2 className="text-lg font-bold text-slate-950">Description</h2>
+              <div className="mt-4 space-y-4 text-sm leading-7 text-slate-600">
+                {intro.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+
+              <div className="mt-8 grid gap-5 md:grid-cols-2">
+                {sections.map((section) => (
+                  <div key={section.title} className="rounded-lg border border-gray-100 bg-gray-50 p-5">
+                    <h3 className="text-base font-bold text-slate-950">{section.title}</h3>
+                    <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-600">
+                      {section.items.map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#FCAB35]" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              {tags.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-sm font-bold text-slate-950">Tags</h3>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-slate-600"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="grid gap-8 py-7 lg:grid-cols-[0.8fr_1.2fr]">
+              <div className="rounded-lg border border-gray-100 bg-gray-50 p-6">
+                <p className="text-4xl font-bold text-slate-950">{roundedAverageRating}</p>
+                <div className="mt-3 flex gap-1 text-[#FCAB35]">
+                  {[...Array(5)].map((_, index) => (
+                    index < Math.round(averageRating)
+                      ? <FaStar key={index} size={16} />
+                      : <FaRegStar key={index} size={16} className="text-gray-300" />
+                  ))}
+                </div>
+                <p className="mt-3 text-sm text-slate-500">
+                  {reviews.length ? `${reviews.length} verified customer review${reviews.length > 1 ? "s" : ""}.` : "No customer reviews yet."}
+                </p>
+
+                <div className="mt-6 space-y-4">
+                  {reviews.map((review) => (
+                    <article key={review._id} className="rounded-lg border border-gray-200 bg-white p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-sm font-bold text-slate-900">{review.name}</h3>
+                        <div className="flex gap-1 text-[#FCAB35]">
+                          {[...Array(5)].map((_, index) => (
+                            index < Number(review.rating)
+                              ? <FaStar key={index} size={13} />
+                              : <FaRegStar key={index} size={13} className="text-gray-300" />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="mt-3 text-sm leading-6 text-slate-600">{review.comment}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-gray-100 bg-white p-6">
+                <h2 className="text-lg font-bold text-slate-950">Write a Review</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  Enter the phone number used on your order. Reviews are only accepted after
+                  this product is verified in your order history.
+                </p>
+
+                <form onSubmit={handleVerifyOrder} className="mt-5 flex flex-col gap-3 sm:flex-row">
+                  <div className="flex-1">
+                    <label className="sr-only" htmlFor="review-phone">Order phone number</label>
+                    <input
+                      id="review-phone"
+                      type="tel"
+                      value={reviewPhone}
+                      onChange={(event) => {
+                        setReviewPhone(event.target.value);
+                        setVerifiedOrder(null);
+                      }}
+                      pattern="[0-9]{11}"
+                      placeholder="01700000000"
+                      className="input input-bordered w-full rounded-lg bg-white text-sm text-slate-900"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isVerifyingOrder}
+                    className="rounded-lg bg-[#FCAB35] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#e89a2c] disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {isVerifyingOrder ? "Verifying..." : "Verify Order"}
+                  </button>
+                </form>
+
+                {verifiedOrder?.eligible && (
+                  <form onSubmit={handleReviewSubmit} className="mt-6 space-y-4">
+                    <div>
+                      <label htmlFor="review-name" className="mb-2 block text-sm font-semibold text-slate-800">
+                        Your Name
+                      </label>
+                      <input
+                        id="review-name"
+                        name="name"
+                        type="text"
+                        className="input input-bordered w-full rounded-lg bg-white text-sm text-slate-900"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="review-rating" className="mb-2 block text-sm font-semibold text-slate-800">
+                        Rating
+                      </label>
+                      <select
+                        id="review-rating"
+                        name="rating"
+                        defaultValue="5"
+                        className="select select-bordered w-full rounded-lg bg-white text-sm text-slate-900"
+                      >
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Star</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="review-comment" className="mb-2 block text-sm font-semibold text-slate-800">
+                        Review
+                      </label>
+                      <textarea
+                        id="review-comment"
+                        name="comment"
+                        rows={4}
+                        className="textarea textarea-bordered w-full rounded-lg bg-white text-sm text-slate-900"
+                        placeholder={`Share your experience with ${productName}`}
+                        required
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmittingReview}
+                      className="rounded-lg bg-[#FCAB35] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#e89a2c] disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {isSubmittingReview ? "Submitting..." : "Submit Review"}
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
+  );
+};
+
+export default ProductDetailsPage;

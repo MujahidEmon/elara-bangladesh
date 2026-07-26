@@ -28,7 +28,7 @@ const ProductCart = () => {
         {/* Left */}
         <div className="md:col-span-2 space-y-4">
           {cartProducts.length === 0 ? (
-            <Link href="/allProducts">
+            <Link href="/products">
               <button className="btn btn-outline w-full mt-24 border-[#FCAB35] text-[#FCAB35]">
                 Browse Product
               </button>

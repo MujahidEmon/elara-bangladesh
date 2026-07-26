@@ -1,11 +1,11 @@
 'use client';
 
 import Image from "next/image";
-import Link from "next/link";
 import Banner from "./Banner/Banner";
 import FeaturedCategories from "../FeaturedCategories/FeaturedCategories";
 import PromoSection from "../FeaturedCategories/promo";
 import NewProductCard from "../ProductCard/ProductCard";
+import ProductCardSkeleton from "../ProductCard/ProductSekeleton";
 import DefaultButton from "../shared/DefaultButton/DefaultButton";
 
 
@@ -19,14 +19,8 @@ import '../../app/swiperStyle.css'
 
 
 // import required modules
-import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
-import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Timer from "../Timer/Timer";
-
-//Timer
-import { useTimer } from 'react-timer-hook';
 import WeeklyDeals from "../WeeklyDeals/WeeklyDeals";
 
 
@@ -35,12 +29,6 @@ import WeeklyDeals from "../WeeklyDeals/WeeklyDeals";
 // Components
 
 
-
-const getAllProducts = async () => {
-  const { data } = await axios.get('http://localhost:3000/products/api/get-all');
-  // console.log(data);
-  return data;
-}
 
 export const testimonials = [
   {
@@ -94,33 +82,54 @@ export const testimonials = [
   },
 ];
 
+const newArrivalTabs = ["Desk Lamp", "Mini Blender", "Grinder", "Electric Cooker"];
+
+const matchesProductTab = (product, tab) => {
+  const query = tab.toLowerCase();
+  const searchableText = [
+    product.productName,
+    product.name,
+    product.title,
+    product.category,
+    product.brand,
+    product.description,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return searchableText.includes(query);
+};
+
 
 export default function Home() {
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
 
   const [products, setProducts] = useState([])
-
-
-  //timer functionality
-  
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [activeNewArrivalTab, setActiveNewArrivalTab] = useState(newArrivalTabs[0]);
 
 
   useEffect(() => {
     const getAllProducts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/api/products");
-        console.log(data);
+        setIsLoadingProducts(true);
+        const { data } = await axios.get("/api/products");
         setProducts(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoadingProducts(false);
       }
     };
 
     getAllProducts();
   }, [])
-  console.log(products);
-  const loading = false; // static data so loading false
+
+  const filteredNewArrivals = products.filter((product) => matchesProductTab(product, activeNewArrivalTab));
+  const newArrivalProducts = (filteredNewArrivals.length ? filteredNewArrivals : products).slice(0, 4);
+
   return (
     <div>
       <Banner />
@@ -142,9 +151,11 @@ export default function Home() {
       <section className="my-24 mx-auto px-4 md:max-w-7xl max-w-sm">
         <h1 className="text-3xl md:text-4xl text-center font-semibold">Our Products</h1>
         <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {
-            products.slice(0,4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
-          }
+          {isLoadingProducts
+            ? Array.from({ length: 4 }).map((_, index) => <ProductCardSkeleton key={index} />)
+            : products.slice(0,4).map((product) => (
+              <NewProductCard product={product} key={product._id}></NewProductCard>
+            ))}
         </div>
         <div className="flex justify-center mt-6 ">
           <DefaultButton text="Show All"></DefaultButton>
@@ -195,37 +206,40 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl md:text-4xl font-semibold md:w-1/3 w-full">New Arrival</h1>
           <div className="hidden md:flex gap-4">
-            <Link href="#" className="hover:text-[#fcab35] font-medium">
-              Desk Lamp
-            </Link>
-            <Link href="#" className="hover:text-[#fcab35] font-medium">
-              Mini Blender
-            </Link>
-            <Link href="#" className="hover:text-[#fcab35] font-medium">
-              Grinder
-            </Link>
-            <Link href="#" className="hover:text-[#fcab35] font-medium">
-              Electric Cooker
-            </Link>
+            {newArrivalTabs.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveNewArrivalTab(tab)}
+                className={`font-medium transition hover:text-[#fcab35] ${
+                  activeNewArrivalTab === tab ? "text-[#fcab35]" : "text-slate-900"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
           {/* DROPDOWN (Mobile) */}
           <div className="md:hidden w-full">
             <select
+              value={activeNewArrivalTab}
+              onChange={(event) => setActiveNewArrivalTab(event.target.value)}
               className="dropdown dropdown-end border-gray-300 rounded-md px-3 py-2 
                      focus:outline-none focus:ring-2 focus:ring-[#fcab35]"
             >
-              <option>Desk Lamp</option>
-              <option>Mini Blender</option>
-              <option>Grinder</option>
-              <option>Electric Cooker</option>
+              {newArrivalTabs.map((tab) => (
+                <option key={tab}>{tab}</option>
+              ))}
             </select>
           </div>
         </div>
         <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {
-            products.slice(0, 4).map((product, index) => <NewProductCard product={product} key={index}></NewProductCard>)
-          }
+          {isLoadingProducts
+            ? Array.from({ length: 4 }).map((_, index) => <ProductCardSkeleton key={index} />)
+            : newArrivalProducts.map((product) => (
+              <NewProductCard product={product} key={product._id}></NewProductCard>
+            ))}
         </div>
       </section>
 

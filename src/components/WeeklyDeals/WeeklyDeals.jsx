@@ -29,7 +29,7 @@ const WeeklyDeals = ({ expiryTimestamp }) => {
                     {/* For TSX uncomment the commented types below */}
                     <div className="space-y-6 w-1/2 text-center flex flex-col items-center">
                         <h1 className="font-semibold text-4xl">Weekly Deals</h1>
-                        <p>Don't Miss ওয়ে Out - Gear Up for Victory with This Week's Unmissable Deals!</p>
+                        <p>Don&apos;t Miss ওয়ে Out - Gear Up for Victory with This Week&apos;s Unmissable Deals!</p>
                         <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
                             <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
                                 <span className="countdown font-mono md:text-5xl text-2xl">
