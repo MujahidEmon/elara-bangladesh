@@ -7,7 +7,7 @@ import PromoSection from "../FeaturedCategories/promo";
 import NewProductCard from "../ProductCard/ProductCard";
 import ProductCardSkeleton from "../ProductCard/ProductSekeleton";
 import DefaultButton from "../shared/DefaultButton/DefaultButton";
-
+import offer2 from '../../../public/offer2.png'
 
 
 // Import Swiper styles
@@ -22,6 +22,7 @@ import '../../app/swiperStyle.css'
 import axios from "axios";
 import { useEffect, useState } from "react";
 import WeeklyDeals from "../WeeklyDeals/WeeklyDeals";
+import SectionHeading from "../SectionHeading/SectionHeading";
 
 
 
@@ -30,57 +31,57 @@ import WeeklyDeals from "../WeeklyDeals/WeeklyDeals";
 
 
 
-export const testimonials = [
-  {
-    id: 1,
-    name: "John Doe",
-    image: "https://readymadeui.com/team-1.webp",
-    rating: 3,
-    text: "ReadymadeUI made it so easy to launch my website. The components are clean, fast to use, and saved me hours of development time.",
-  },
-  {
-    id: 2,
-    name: "Mark Adair",
-    image: "https://readymadeui.com/team-2.webp",
-    rating: 5,
-    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
-  },
-  {
-    id: 3,
-    name: "Mark Adair",
-    image: "https://readymadeui.com/team-2.webp",
-    rating: 5,
-    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
-  },
-  {
-    id: 4,
-    name: "Mark Adair",
-    image: "https://readymadeui.com/team-2.webp",
-    rating: 5,
-    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
-  },
-  {
-    id: 5,
-    name: "Mark Adair",
-    image: "https://readymadeui.com/team-2.webp",
-    rating: 5,
-    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
-  },
-  {
-    id: 6,
-    name: "Mark Adair",
-    image: "https://readymadeui.com/team-2.webp",
-    rating: 5,
-    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
-  },
-  {
-    id: 7,
-    name: "Mark Adair",
-    image: "https://readymadeui.com/team-2.webp",
-    rating: 5,
-    text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
-  },
-];
+// export const testimonials = [
+//   {
+//     id: 1,
+//     name: "John Doe",
+//     image: "https://readymadeui.com/team-1.webp",
+//     rating: 3,
+//     text: "ReadymadeUI made it so easy to launch my website. The components are clean, fast to use, and saved me hours of development time.",
+//   },
+//   {
+//     id: 2,
+//     name: "Mark Adair",
+//     image: "https://readymadeui.com/team-2.webp",
+//     rating: 5,
+//     text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+//   },
+//   {
+//     id: 3,
+//     name: "Mark Adair",
+//     image: "https://readymadeui.com/team-2.webp",
+//     rating: 5,
+//     text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+//   },
+//   {
+//     id: 4,
+//     name: "Mark Adair",
+//     image: "https://readymadeui.com/team-2.webp",
+//     rating: 5,
+//     text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+//   },
+//   {
+//     id: 5,
+//     name: "Mark Adair",
+//     image: "https://readymadeui.com/team-2.webp",
+//     rating: 5,
+//     text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+//   },
+//   {
+//     id: 6,
+//     name: "Mark Adair",
+//     image: "https://readymadeui.com/team-2.webp",
+//     rating: 5,
+//     text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+//   },
+//   {
+//     id: 7,
+//     name: "Mark Adair",
+//     image: "https://readymadeui.com/team-2.webp",
+//     rating: 5,
+//     text: "I love how professional everything looks with ReadymadeUI. The templates are modern, responsive, and easy to customize.",
+//   },
+// ];
 
 const newArrivalTabs = ["Desk Lamp", "Mini Blender", "Grinder", "Electric Cooker"];
 
@@ -135,22 +136,22 @@ export default function Home() {
       <Banner />
 
       {/* Featured Categories Section */}
-      <section className="my-24 max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl text-center font-semibold">Shop By Categories</h1>
+      <section className="lg:lg:my-16 md:my-12 my-10  max-w-7xl mx-auto">
+        {/* <h1 className="text-3xl md:text-4xl text-center font-semibold">Shop By Categories</h1> */}
         <FeaturedCategories>  </FeaturedCategories>
       </section>
 
       {/* Promo Section */}
-      <section className="my-24 max-w-7xl mx-auto">
+      <section className="lg:lg:my-16 md:my-12 my-10  max-w-7xl mx-auto">
         <PromoSection></PromoSection>
       </section>
 
-
+    
 
       {/* Our Products Section */}
-      <section className="my-24 mx-auto px-4 md:max-w-7xl max-w-sm">
-        <h1 className="text-3xl md:text-4xl text-center font-semibold">Our Products</h1>
-        <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <section className="lg:lg:my-16 md:my-12 my-10  mx-auto px-4 md:max-w-7xl max-w-sm">
+        <SectionHeading title="Our Products" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-6 md:mt-12">
           {isLoadingProducts
             ? Array.from({ length: 4 }).map((_, index) => <ProductCardSkeleton key={index} />)
             : products.slice(0,4).map((product) => (
@@ -166,45 +167,44 @@ export default function Home() {
 
 
       {/* Ongoing Offer Section */}
-      <section className="mx-auto my-24 px-8 md:max-w-7xl max-w-sm">
-        <div className="flex lg:flex-row lg:mb-0 mb-18 flex-col gap-8 lg:gap-0 justify-between">
+      <section className="mx-auto lg:lg:my-16 md:my-12 my-10  px-8 md:max-w-7xl max-w-sm">
+        <div className="flex lg:flex-row lg:mb-0 mb-18 flex-col gap-10 lg:gap-4 justify-between">
+          <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center" >
+            <Image src={offer2} className="rounded-xl" alt="Banner 1" height={350} width={700}>
+            </Image>
+          </div>
+          <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center">
+            <h1 className="text-3xl lg:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
+            <p className="max-w-3xs md:max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, consectetur? </p>
+            <div className="flex justify-center gap-3 items-center">
+              <p className="font-bold text-3xl text-amber-600">85$</p>
+              <DefaultButton text="Grab Now"></DefaultButton>
+            </div>
+          </div>
+        </div>
+        <div className="flex lg:flex-row-reverse lg:mb-0 mb-18 flex-col gap-10 lg:gap-4 justify-between">
           <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center" >
             <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={350} width={700}>
-
             </Image>
           </div>
           <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center">
             <h1 className="text-3xl lg:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
             <p className="max-w-3xs md:max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, consectetur? </p>
             <div className="flex justify-center gap-3 items-center">
-              <p className="font-bold text-3xl text-amber-600">85$</p>
+              <p className="font-bold text-3xl text-amber-600">BDT 1500</p>
               <DefaultButton text="Grab Now"></DefaultButton>
             </div>
           </div>
         </div>
 
-        <div className="flex lg:flex-row flex-col-reverse gap-6 lg:gap-0 justify-between">
-          <div className="lg:w-1/2 w-full flex gap-2 flex-col items-center justify-center">
-            <h1 className="text-3xl lg:text-5xl font-semibold ">Lorem ipsum dolor sit.</h1>
-            <p className="max-w-3xs md:max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, consectetur? </p>
-            <div className="flex justify-center gap-3 items-center">
-              <p className="font-bold text-3xl text-amber-600">85$</p>
-              <DefaultButton text="Grab Now"></DefaultButton>
-            </div>
-          </div>
-          <div>
-            <Image src={'https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp'} className="rounded-xl" alt="Banner 1" height={350} width={700}>
-
-            </Image>
-          </div>
-        </div>
+        
       </section>
 
 
       {/* New Arrival Section */}
-      <section className="mx-auto my-24 px-8 md:max-w-7xl max-w-sm">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl md:text-4xl font-semibold md:w-1/3 w-full">New Arrival</h1>
+      <section className="mx-auto lg:lg:my-16 md:my-12 my-10  px-8 md:max-w-7xl max-w-sm">
+        <div className="flex items-center justify-between border-b border-gray-200 mb-8">
+          <h1 className="text-3xl md:text-4xl  md:w-1/3 w-full">New Arrival</h1>
           <div className="hidden md:flex gap-4">
             {newArrivalTabs.map((tab) => (
               <button
@@ -234,7 +234,7 @@ export default function Home() {
             </select>
           </div>
         </div>
-        <div className="grid grid-cols-2 md:mt-12 mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-6 md:mt-12">
           {isLoadingProducts
             ? Array.from({ length: 4 }).map((_, index) => <ProductCardSkeleton key={index} />)
             : newArrivalProducts.map((product) => (
@@ -251,7 +251,7 @@ export default function Home() {
 
 
       {/*<Ratings /> */}
-      {/* <section className="max-w-7xl my-24 mx-auto">
+      {/* <section className="max-w-7xl lg:lg:my-16 md:my-12 my-10  mx-auto">
         <Swiper
           slidesPerView={1}
           spaceBetween={30}

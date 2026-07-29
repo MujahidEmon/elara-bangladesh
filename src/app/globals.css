@@ -5,5 +5,10 @@
 
 /* DaisyUI light theme (DEFAULT) */
 @plugin "daisyui/theme" {
- 
+}
+
+
+html,
+body {
+  overflow-x: hidden;
 }

@@ -28,18 +28,6 @@ import categorySound from "../../../public/feature2.jpg";
 import categoryTv from "../../../public/feature3.jpg";
 import categorySmart from "../../../public/bannerbg1.png";
 
-const categories = [
-  { name: "Combos", href: "/products?search=combo", image: categoryAccessory },
-  { name: "Offer Zone", href: "/products?search=offer", image: categoryPhone },
-  { name: "Phone", href: "/products?search=phone", image: categoryPhone, hasDropdown: true },
-  { name: "Tablet", href: "/products?search=tablet", image: categorySmart },
-  { name: "Laptop", href: "/products?search=laptop", image: categoryLaptop, hasDropdown: true },
-  { name: "Accessories", href: "/products?search=accessories", image: categoryAccessory },
-  { name: "Smart Devices", href: "/products?search=smart", image: categorySmart, hasDropdown: true },
-  { name: "Sound Appliance", href: "/products?search=sound", image: categorySound },
-  { name: "Home Appliance", href: "/products?search=home", image: categoryDesktop, hasDropdown: true },
-  { name: "Smart TV", href: "/products?search=tv", image: categoryTv },
-];
 
 const actions = [
   { label: "Track Order", icon: FiPackage, href: "/track/order" },
@@ -63,7 +51,6 @@ const Navbar = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
-  const [hasScrolled, setHasScrolled] = useState(false);
   const { data: dbCategories = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -71,28 +58,17 @@ const Navbar = () => {
       return data;
     },
   });
-  const navCategories = dbCategories.length
-    ? dbCategories.map((category) => ({
-        name: category.name,
-        href: category.href || `/products?search=${encodeURIComponent(category.name)}`,
-        image: category.image || category.imageUrl || categoryLaptop,
-        hasDropdown: category.hasDropdown,
-      }))
-    : categories;
+  const navCategories = dbCategories.map((category) => ({
+      name: category.name,
+      href: category.href || `/products?search=${encodeURIComponent(category.name)}`,
+      image: category.image || category.imageUrl || categoryLaptop,
+      hasDropdown: category.hasDropdown,
+    }))
   const visibleCategories = useMemo(() => navCategories.slice(0, 11), [navCategories]);
   const trimmedSearch = searchTerm.trim();
   const shouldShowSuggestions = isSearchFocused && trimmedSearch.length > 0;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 8);
-    };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     if (!trimmedSearch) {
@@ -150,9 +126,8 @@ const Navbar = () => {
 
   const SearchSuggestions = ({ compact = false }) => (
     <div
-      className={`absolute left-0 right-0 top-[calc(100%+8px)] z-[70] overflow-hidden rounded-xl border border-slate-100 bg-white text-slate-900 shadow-2xl ${
-        compact ? "max-h-[360px]" : "max-h-[430px]"
-      }`}
+      className={`absolute left-0 right-0 top-[calc(100%+8px)] z-70 overflow-hidden rounded-xl border border-slate-100 bg-white text-slate-900 shadow-2xl ${compact ? "max-h-[360px]" : "max-h-[430px]"
+        }`}
     >
       <div className="border-b border-slate-100 px-4 py-3 text-xs font-bold uppercase tracking-wide text-slate-400">
         Search results
@@ -201,9 +176,9 @@ const Navbar = () => {
   );
 
   return (
-    <header className="relative z-50 bg-white shadow-sm">
+    <header className=" bg-white shadow-sm">
       <div className="sticky top-0 z-50 bg-white">
-        <div className="mx-auto hidden h-[92px] max-w-7xl items-center gap-8 px-4 lg:flex">
+        <div className="mx-auto hidden py-3 max-w-7xl items-center gap-8 px-4 lg:flex">
           {/* <Link href="/" className="relative h-14 w-40 shrink-0" aria-label="Elara Bangladesh home">
             
           </Link> */}
@@ -283,18 +258,21 @@ const Navbar = () => {
       </div>
 
       <nav
-        className={`hidden overflow-hidden bg-[#002c26] transition-all duration-300 lg:block ${
-          hasScrolled ? "max-h-0 opacity-0" : "max-h-14 opacity-100"
-        }`}
+        className="hidden  bg-[#fcab35] transition-all duration-300 lg:block "
       >
-        <div className="mx-auto flex h-14 max-w-7xl items-center gap-7 overflow-x-auto px-4">
+        <div className="mx-auto flex h-10 justify-center max-w-7xl items-center gap-7 overflow-x-auto px-4">
+          <Link
+            href={'/products'}
+            className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${isActive('/products') ? "text-[#fcab35]" : ""
+              }`}
+          >All Products
+          </Link>
           {visibleCategories.map((category) => (
             <Link
               key={category.name}
               href={category.href}
-              className={`inline-flex shrink-0 items-center gap-1.5 text-base font-medium text-white transition hover:text-[#fcab35] ${
-                isActive(category.href) ? "text-[#fcab35]" : ""
-              }`}
+              className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${isActive(category.href) ? "text-[#fcab35]" : ""
+                }`}
             >
               {category.name}
               {category.hasDropdown && <FiChevronDown size={17} strokeWidth={2.2} />}
@@ -304,7 +282,7 @@ const Navbar = () => {
       </nav>
 
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-[60] lg:hidden">
+        <div className="fixed inset-0 z-60 lg:hidden">
           <button
             type="button"
             className="absolute inset-0 bg-black/55"
@@ -381,7 +359,7 @@ const Navbar = () => {
           </aside>
         </div>
       )}
-    </header> 
+    </header>
   );
 };
 

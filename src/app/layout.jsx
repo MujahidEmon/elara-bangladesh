@@ -1,4 +1,4 @@
-import { Anek_Bangla, Geist, Geist_Mono, Raleway, Titillium_Web } from "next/font/google";
+import { Anek_Bangla, Geist, Geist_Mono, Poppins, Raleway, Titillium_Web } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
@@ -8,12 +8,11 @@ import Providers from "@/services/providers";
 
 
 
-const raleway = Raleway(
-  {
-    weight: ["400", "500", "600", "700"],
-    subsets: ["latin"], 
-  }
-)
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export const metadata = {
   title: {
@@ -27,7 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light">
       <body
-        className={`${raleway.className} antialiased bg-[#fffefe]`}
+        className={`${poppins.className} antialiased bg-[#fffefe]`}
       >
         <AuthProvider>
           <Providers>

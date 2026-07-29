@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTimer } from 'react-timer-hook';    
 import bannerImg from '../../../public/109.png'
 
+
 const WeeklyDeals = ({ expiryTimestamp }) => {
 
      const {
@@ -29,27 +30,27 @@ const WeeklyDeals = ({ expiryTimestamp }) => {
                     {/* For TSX uncomment the commented types below */}
                     <div className="space-y-6 w-1/2 text-center flex flex-col items-center">
                         <h1 className="font-semibold text-4xl">Weekly Deals</h1>
-                        <p>Don&apos;t Miss ওয়ে Out - Gear Up for Victory with This Week&apos;s Unmissable Deals!</p>
+                        <p>Don&apos;t Miss Way Out - Gear Up for Victory with This Week&apos;s Unmissable Deals!</p>
                         <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
-                            <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                            <div className="flex flex-col p-4 bg-white rounded-box text-neutral">
                                 <span className="countdown font-mono md:text-5xl text-2xl">
                                     {days}
                                 </span>
                                 days
                             </div>
-                            <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                            <div className="flex flex-col p-4 bg-white rounded-box text-neutral">
                                 <span className="countdown font-mono text-5xl">
                                     {hours}
                                 </span>
                                 hours
                             </div>
-                            <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                            <div className="flex flex-col p-4 bg-white rounded-box text-neutral">
                                 <span className="countdown font-mono text-5xl">
                                     {minutes}
                                 </span>
                                 min
                             </div>
-                            <div className="flex flex-col p-2 bg-white rounded-box text-neutral">
+                            <div className="flex flex-col p-4 bg-white rounded-box text-neutral">
                                 <span className="countdown font-mono text-5xl">
                                     {seconds}
                                 </span>

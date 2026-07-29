@@ -1,21 +1,20 @@
 const ProductCardSkeleton = () => {
   return (
-    <div className="bg-white border border-gray-200 max-w-2xs rounded-2xl overflow-hidden">
-      
-      {/* Image Skeleton */}
-      <div className="aspect-square skeleton w-full rounded-b-2xl"></div>
+    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+      {/* Image */}
+      <div className="aspect-square bg-gray-50 rounded-b-2xl p-3">
+        <div className="skeleton w-full h-full rounded-xl"></div>
+      </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
-        
-        {/* Title */}
-        <div className="skeleton h-4 w-3/4"></div>
+      <div className="p-4">
+        <div className="skeleton h-4 w-5/6 mb-2"></div>
+        <div className="skeleton h-4 w-3/5"></div>
 
-        {/* Price + Button */}
-        <div className="flex items-center justify-between mt-6">
-          <div className="skeleton h-4 w-1/4"></div>
+        <div className="flex justify-between items-center mt-8">
+          <div className="skeleton h-6 w-24"></div>
 
-          <div className="skeleton h-10 w-10 rounded-full"></div>
+          <div className="skeleton w-11 h-11 rounded-full shrink-0"></div>
         </div>
       </div>
     </div>

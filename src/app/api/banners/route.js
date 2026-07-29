@@ -4,8 +4,10 @@ export const GET = async () => {
   try {
     const db = await connectDB();
     const banners = await db
-      .collection("banners")
-      .find({ isActive: true })
+      .collection("sliders")
+      .find({
+        $or: [{ isActive: true }, { status: "Active" }],
+      })
       .sort({ order: 1, createdAt: -1 })
       .toArray();
 
