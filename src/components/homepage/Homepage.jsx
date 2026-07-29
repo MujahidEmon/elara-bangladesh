@@ -159,7 +159,7 @@ export default function Home() {
             ))}
         </div>
         <div className="flex justify-center mt-6 ">
-          <DefaultButton text="Show All"></DefaultButton>
+          <DefaultButton text="Show All" href="/products"></DefaultButton>
         </div>
       </section>
 

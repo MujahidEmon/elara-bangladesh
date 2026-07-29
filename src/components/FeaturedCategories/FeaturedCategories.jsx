@@ -28,7 +28,7 @@ const FeaturedCategories = () => {
                 src={item.image || "https://i.ibb.co/0j1Z2kD/category-placeholder.png"}
                 alt={item.name}
                 fill
-                className="object-cover object-top rounded-xl"
+                className="object-cover object-top rounded-xl group-hover:scale-105 transition-transform duration-500"
               />
             </div>
 

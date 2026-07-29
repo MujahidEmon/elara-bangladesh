@@ -29,6 +29,9 @@ import categoryTv from "../../../public/feature3.jpg";
 import categorySmart from "../../../public/bannerbg1.png";
 
 
+
+
+
 const actions = [
   { label: "Track Order", icon: FiPackage, href: "/track/order" },
   // { label: "Sign In", icon: FiUser, href: "/login", isAccount: true },
@@ -68,6 +71,13 @@ const Navbar = () => {
   const trimmedSearch = searchTerm.trim();
   const shouldShowSuggestions = isSearchFocused && trimmedSearch.length > 0;
 
+  console.log(typeof pathname);
+
+  const href = usePathname();
+const act =
+    href === "/"
+      ? pathname === "/"
+      : pathname.startsWith(href);
 
 
   useEffect(() => {
@@ -257,13 +267,16 @@ const Navbar = () => {
         </div>
       </div>
 
+
+
+{/* BottomPath  */}
       <nav
         className="hidden  bg-[#fcab35] transition-all duration-300 lg:block "
       >
         <div className="mx-auto flex h-10 justify-center max-w-7xl items-center gap-7 overflow-x-auto px-4">
           <Link
             href={'/products'}
-            className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${isActive('/products') ? "text-[#fcab35]" : ""
+            className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${isActive? "text-blue-600" : ""
               }`}
           >All Products
           </Link>
@@ -271,7 +284,7 @@ const Navbar = () => {
             <Link
               key={category.name}
               href={category.href}
-              className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${isActive(category.href) ? "text-[#fcab35]" : ""
+              className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${act ? "text-[#fcab35]" : ""
                 }`}
             >
               {category.name}

@@ -57,7 +57,7 @@ const useLocalCart = () => {
   return {
     cartProducts,
     handleAddToCart: (product) => addMutation.mutate(product),
-    handleDeleteFromLs: (product) => deleteMutation.mutate(product),
+    handleDeleteFromLs: (product) => deleteMutation.mutate(product  ),
     handleIncreaseLs: (id) => incMutation.mutate(id),
     handleDecreaseLs: (id) => decMutation.mutate(id),
   };
