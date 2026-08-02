@@ -13,13 +13,13 @@ const BannerSlider = ({ banners }) => {
         {banners.map((slide) => (
           <SwiperSlide key={slide._id}>
             <div
-              className=" mx-auto rounded-lg md:h-[500px] h-80 bg-cover bg-center flex flex-col md:items-start items-center justify-center gap-8 md:p-10 p-6 lg:p-16"
+              className=" mx-auto rounded-b-lg md:h-[550px] h-72 bg-cover bg-center flex flex-col md:items-start  justify-center gap-8 md:p-10 p-6 lg:p-16"
               style={{ backgroundImage: `url(${slide.bannerImage})` }}
             >
-              <div className="md:w-1/2 w-full flex flex-col md:items-start items-center justify-center gap-8">
-                <h1 className="text-3xl md:text-5xl">{slide.heading}</h1>
+              <div className="md:w-1/2 w-2/3 px-0 md:px-4 flex flex-col items-start  gap-3">
+                <h1 className="text-2xl md:text-5xl">{slide.heading}</h1>
 
-                <p className="text-lg md:text-neutral text-center md:text-xl">
+                <p className="text-xs  md:text-xl">
                   {slide.paragraph}
                 </p>
 

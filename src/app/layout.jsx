@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
         className={`${poppins.className} antialiased bg-[#fffefe]`}
       >
         <AuthProvider>
-          <Providers> 
+        <Providers> 
             <Navbar></Navbar>
             <div className = "lg:max-w-7xl md:max-w-full max-w-sm mx-auto">
               {children}

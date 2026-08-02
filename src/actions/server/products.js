@@ -6,7 +6,13 @@ const productCollection = await db.collection("products");
 
 export const getProducts = async () => {
     const products = await productCollection.find().toArray();
-    return products;
+    // return products;
+    return products.map((product) => ({
+    ...product,
+    _id: product._id.toString(),
+    createdAt: product.createdAt?.toISOString(),
+    updatedAt: product.updatedAt?.toISOString(),
+  }));
 }
 
 

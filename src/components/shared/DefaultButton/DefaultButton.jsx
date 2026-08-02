@@ -6,7 +6,7 @@ const DefaultButton = ({ text = "Button Text", href = "#" }) => {
     <Link
      
       href={href}
-      className="relative inline-block px-5 py-2.5 overflow-hidden rounded 
+      className="relative inline-block px-5 py-2 overflow-hidden rounded 
                  bg-[#fcab35] text-white group
                  hover:bg-linear-to-r hover:from-[#fcab35] hover:to-[#ffd27a]
                  hover:ring-2 hover:ring-offset-2 hover:ring-[#fcab35]
@@ -19,7 +19,7 @@ const DefaultButton = ({ text = "Button Text", href = "#" }) => {
                    transition-all duration-1000 ease
                    group-hover:-translate-x-40"
       />
-      <span className="relative font-semibold">{text}</span>
+      <span className="relative text-xs font-semibold">{text}</span>
     </Link>
   );
 };
