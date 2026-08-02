@@ -99,12 +99,6 @@ export default async function Home() {
         <FeaturedCategories>  </FeaturedCategories>
       </section>
 
-      {/* Promo Section */}
-      <section className="lg:lg:my-16 md:my-12 my-10   ">
-        <PromoSection></PromoSection>
-      </section>
-
-
 
       {/* Our Products Section */}
       <section className="lg:lg:my-16 md:my-12 my-10">
@@ -117,6 +111,11 @@ export default async function Home() {
         <div className="flex justify-center mt-6 ">
           <DefaultButton text="Show All" href="/products"></DefaultButton>
         </div>
+      </section>
+
+      {/* Promo Section */}
+      <section className="lg:lg:my-16 md:my-12 my-10   ">
+        <PromoSection></PromoSection>
       </section>
 
 
@@ -209,7 +208,7 @@ export default async function Home() {
 
 
       {/* Carousel Section */}
-      {/* <div className="flex flex-col lg:flex-row text-white">
+      <div className="flex flex-col lg:flex-row text-white lg:lg:my-16 md:my-12 my-10">
         {[
           "https://i.ibb.co.com/sJW0vqdQ/banner-image-4.webp",
           "https://i.ibb.co.com/chZzWbwR/banner-image-5-c7660f9f-ff9c-4284-9885-de48ab56d108.webp",
@@ -231,7 +230,7 @@ export default async function Home() {
             <button className="mt-2 border-b-2">Buy Now</button>
           </div>
         ))}
-      </div> */}
+      </div>
     </div>
   );
 }

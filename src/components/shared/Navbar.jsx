@@ -275,6 +275,12 @@ const act =
       >
         <div className="mx-auto flex h-10 justify-center max-w-7xl items-center gap-7 overflow-x-auto px-4">
           <Link
+            href={'/'}
+            className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${isActive? "text-blue-600" : ""
+              }`}
+          >Home
+          </Link>
+          <Link
             href={'/products'}
             className={`inline-flex shrink-0 items-center gap-1.5 text-base  text-white transition hover:text-black ${isActive? "text-blue-600" : ""
               }`}
@@ -336,6 +342,9 @@ const act =
               {shouldShowSuggestions && <SearchSuggestions compact />}
             </form>
 
+            
+            
+            
             <div className="px-5 py-5">
               <p className="text-sm font-bold uppercase text-gray-400">Browse Categories</p>
               <div className="mt-4 divide-y divide-gray-100">

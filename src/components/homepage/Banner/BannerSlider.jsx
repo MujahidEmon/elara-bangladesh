@@ -3,13 +3,25 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay} from "swiper/modules";
 import DefaultButton from "@/components/shared/DefaultButton/DefaultButton";
 
 const BannerSlider = ({ banners }) => {
   return (
     <div className="">
-      <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+      <Swiper 
+        rewind={true}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: true,
+        }}
+        cssMode={true}
+        navigation={true}
+        pagination={true}
+        mousewheel={true}
+        keyboard={true}
+        modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay]}
+        className="mySwiper">
         {banners.map((slide) => (
           <SwiperSlide key={slide._id}>
             <div
