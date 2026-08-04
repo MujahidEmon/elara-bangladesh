@@ -1,12 +1,18 @@
-import { Anek_Bangla, Geist, Geist_Mono, Poppins, Raleway, Titillium_Web } from "next/font/google";
+import {
+  Poppins,
+} from "next/font/google";
+
 import "./globals.css";
+
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+
 import AuthProvider from "@/services/AuthProvider";
-import { Toaster } from "react-hot-toast";
 import Providers from "@/services/providers";
 
+import CartAnimationProvider from "@/components/cart/CartAnimationProvider";
 
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,7 +25,8 @@ export const metadata = {
     default: "Elara Bangladesh",
     template: "%s | Elara BD",
   },
-  description: "Trusted online marketplace for buying products in Bangladesh.",
+  description:
+    "Trusted online marketplace for buying products in Bangladesh.",
 };
 
 export default function RootLayout({ children }) {
@@ -29,14 +36,18 @@ export default function RootLayout({ children }) {
         className={`${poppins.className} antialiased bg-[#fffefe]`}
       >
         <AuthProvider>
-        <Providers> 
-            <Navbar></Navbar>
-            <div className = "lg:max-w-7xl md:max-w-full max-w-sm mx-auto">
-              {children}
-            </div>
+          <Providers>
+            <CartAnimationProvider>
+              <Navbar />
 
-            <Footer></Footer>
-            <Toaster></Toaster>
+              <div className="mx-auto max-w-sm md:max-w-full lg:max-w-7xl">
+                {children}
+              </div>
+
+              <Footer />
+
+              <Toaster />
+            </CartAnimationProvider>
           </Providers>
         </AuthProvider>
       </body>

@@ -17,6 +17,7 @@ import WeeklyDeals from "../WeeklyDeals/WeeklyDeals";
 import SectionHeading from "../SectionHeading/SectionHeading";
 import { getProducts } from "@/actions/server/products";
 import NewArrivalSection from "./NewArrivalSection/NewArrivalSection";
+import CartSlider from "../cart/CartSlider";
 
 
 
@@ -206,7 +207,7 @@ export default async function Home() {
       </section> */}
 
 
-
+      <CartSlider></CartSlider>
       {/* Carousel Section */}
       <div className="flex flex-col lg:flex-row text-white lg:lg:my-16 md:my-12 my-10">
         {[
