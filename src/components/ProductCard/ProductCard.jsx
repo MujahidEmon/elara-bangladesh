@@ -13,7 +13,9 @@ const NewProductCard = ({ product }) => {
     productName,
     price,
     _id,
+    gallery
   } = product;
+  console.log(gallery);
 
   const { handleAddToCart } = useLocalCart();
   const { openCartSlider } = useCartAnimation();
@@ -47,46 +49,45 @@ const NewProductCard = ({ product }) => {
         href={`/products/${_id}`}
         className="block"
       >
-        <div>
-          <div
-            className="
-              mx-auto
-              aspect-square
-              overflow-hidden
-              bg-gray-50
-              text-center
-            "
+        <div
+          className="
+    mx-auto
+    aspect-square
+    overflow-hidden
+    bg-gray-50
+    text-center
+  "
+        >
+          <figure
+            className={
+              gallery?.length
+                ? "hover-gallery h-full w-full "
+                : "flex h-full w-full items-center justify-center"
+            }
           >
-            <figure className="hover-gallery object-contain">
-              <Image
-                height={200}
-                width={200}
-                src={image}
-                alt={productName}
-              />
+            <Image
+              height={200}
+              width={200}
+              src={image}
+              alt={productName}
+              className={
+                gallery?.length
+                  ? "object-contain"
+                  : "h-full w-full object-contain"
+              }
+            />
 
+            {gallery?.map((img, index) => (
+              
               <Image
+                key={index}
                 height={200}
                 width={200}
-                src="https://i.ibb.co.com/whXHfKy8/Mini-Flower.jpg"
-                alt={productName}
+                src={img}
+                alt={`${productName} ${index + 2}`}
               />
-
-              <Image
-                height={200}
-                width={200}
-                src="https://img.daisyui.com/images/stock/daisyui-hat-3.webp"
-                alt={productName}
-              />
-
-              <Image
-                height={200}
-                width={200}
-                src="https://img.daisyui.com/images/stock/daisyui-hat-4.webp"
-                alt={productName}
-              />
-            </figure>
-          </div>
+            ))}
+          </figure>
         </div>
 
         <div className="p-4">

@@ -94,7 +94,7 @@ const SearchSuggestions = ({
           {searchResults.map((product) => (
             <Link
               key={product._id}
-              href={`/products/${product._id}`}
+              href={`/products/${product?._id}`}
               onClick={handleResultClick}
               className="flex items-center gap-3 px-4 py-3 transition hover:bg-[#fff8ed]"
             >

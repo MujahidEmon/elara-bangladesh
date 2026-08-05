@@ -1,5 +1,6 @@
 'use client';
 
+import ProductDetailsSkeleton from "@/components/ProductCard/ProductDetailsSkeleton";
 import AppLoader from "@/components/shared/AppLoader";
 import DefaultButton from "@/components/shared/DefaultButton/DefaultButton";
 import { getProductById } from "@/services/getProducts";
@@ -190,7 +191,7 @@ const ProductDetailsPage = () => {
     }
   };
 
-  if (isLoading) return <AppLoader className="min-h-[70vh]" label="Loading product" />;
+  if (isLoading) return <ProductDetailsSkeleton></ProductDetailsSkeleton>
 
   if (isError) {
     return (
@@ -226,13 +227,13 @@ const ProductDetailsPage = () => {
                     alt={`${productName || "Product"} thumbnail ${index + 1}`}
                     fill
                     sizes="80px"
-                    className="object-contain p-2"
+                    className="object-contain p-1"
                   />
                 </button>
               ))}
             </div>
 
-            <div className="order-1 overflow-hidden rounded-lg border border-gray-100 bg-gray-50 sm:order-2">
+            <div className="order-1 overflow-hidden rounded-lg sm:order-2">
               <div className="relative aspect-square">
                 {currentImage && (
                   <Image
@@ -241,16 +242,10 @@ const ProductDetailsPage = () => {
                     fill
                     priority
                     sizes="(min-width: 1024px) 560px, 100vw"
-                    className="object-contain p-6"
+                    className="object-contain rounded-lg"
                   />
                 )}
-                <button
-                  type="button"
-                  className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-700 shadow-sm"
-                  aria-label="Zoom product image"
-                >
-                  <FiSearch size={17} />
-                </button>
+                
               </div>
             </div>
           </div>
