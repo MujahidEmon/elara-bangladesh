@@ -65,7 +65,7 @@ const OrderTracking = ({ initialOrderNumber = "" }) => {
   const currentStep = statusIndex[orderStatus] ?? 0;
 
   return (
-    <main className="min-h-[70vh] bg-[#f6f8fb]">
+    <main className="min-h-[70vh] mb-10 bg-[#f6f8fb]">
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-16 lg:grid-cols-[1fr_520px] lg:items-center">
           <div>

@@ -19,7 +19,7 @@ const Page = () => {
         const response = signIn('credentials', {
             email, password, redirect: false
         });
-        console.log(response);
+        // console.log(response);
     }
 
 

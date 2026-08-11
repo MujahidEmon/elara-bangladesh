@@ -16,7 +16,6 @@ const page = () => {
         }
         const {data} = await axios.post('http://localhost:3000/signUp/api', newUser);
 
-        console.log(data);
     }
 
 

@@ -1,8 +1,28 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
   images: {
-    domains: ['i.ibb.co', 'i.ibb.co.com', "readymadeui.com", 'img.daisyui.com', 'res.cloudinary.com', 'https://i.ibb.co.com/'],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co.com",
+      },
+      {
+        protocol: "https",
+        hostname: "readymadeui.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img.daisyui.com",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
   },
 };
 

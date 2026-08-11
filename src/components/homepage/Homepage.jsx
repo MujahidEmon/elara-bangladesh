@@ -87,7 +87,6 @@ export default async function Home() {
   // time.setSeconds(time.getSeconds() + 600); 
 
   const products = await getProducts();
-  console.log(products);
 
 
   return (

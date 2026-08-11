@@ -6,7 +6,6 @@ import { getCategories } from "@/actions/server/categories";
 const FeaturedCategories = async () => {
 const categories = await getCategories();
 
-console.log("Categories:", categories);
 
 return ( 
 <div> <SectionHeading title="Top Categories" />

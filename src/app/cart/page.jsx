@@ -8,7 +8,7 @@ const ProductCart = () => {
 
   const [insideDhaka, setInsideDhaka] = useState(true);
   const { cartProducts } = useLocalCart();
-  console.log(cartProducts);
+  // console.log(cartProducts);
 
   const deliveryCharge = insideDhaka ? 80 : 130;
 

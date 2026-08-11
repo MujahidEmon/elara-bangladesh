@@ -1,8 +1,8 @@
 import Link from "next/link";
-
-
+import { Suspense } from "react";
 
 import { getCategories } from "@/actions/server/categories";
+
 import CartButton from "./Navbar/CartButton";
 import SearchBox from "./Navbar/SearchBox";
 import MobileMenu from "./Navbar/MobileMenu";
@@ -25,17 +25,22 @@ const Navbar = async () => {
       {/* ================= DESKTOP TOP BAR ================= */}
       <div className="sticky top-0 z-50 bg-white">
         <div className="mx-auto hidden max-w-7xl items-center gap-8 px-4 py-3 lg:flex">
-          
+
           {/* Logo */}
           <Link
             href="/"
             className="shrink-0 bg-transparent font-semibold text-black md:text-2xl"
           >
-            <span className="text-[#FCAB35]">Elara</span> Bangladesh
+            <span className="text-[#FCAB35]">
+              Elara
+            </span>{" "}
+            Bangladesh
           </Link>
 
           {/* Search */}
-          <SearchBox />
+          <Suspense fallback={null}>
+            <SearchBox />
+          </Suspense>
 
           {/* Cart / Actions */}
           <div className="flex shrink-0 items-center gap-6">
@@ -54,19 +59,26 @@ const Navbar = async () => {
 
         {/* ================= MOBILE HEADER ================= */}
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:hidden">
-          <MobileMenu
-            categories={navCategories}
-          />
+
+          <Suspense fallback={null}>
+            <MobileMenu categories={navCategories} />
+          </Suspense>
 
           <Link
             href="/"
             className="bg-transparent font-semibold text-black md:text-2xl"
           >
-            <span className="text-[#FCAB35]">Elara</span> Bangladesh
+            <span className="text-[#FCAB35]">
+              Elara
+            </span>{" "}
+            Bangladesh
           </Link>
 
           <div className="flex items-center gap-3 text-slate-900">
-            <Link href="/cart" aria-label="View cart">
+            <Link
+              href="/cart"
+              aria-label="View cart"
+            >
               <CartButton compact />
             </Link>
           </div>
@@ -74,7 +86,9 @@ const Navbar = async () => {
       </div>
 
       {/* ================= DESKTOP NAVIGATION ================= */}
-      <DesktopNav categories={navCategories} />
+      <Suspense fallback={null}>
+        <DesktopNav categories={navCategories} />
+      </Suspense>
     </header>
   );
 };

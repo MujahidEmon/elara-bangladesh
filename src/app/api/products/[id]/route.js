@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 
 export async function GET(request, { params }){
   const param = await params;
-  console.log("Params:", params.id);
+  // console.log("Params:", params.id);
   const db =  await connectDB();
   const productCollection =  await db.collection("products");
   try {

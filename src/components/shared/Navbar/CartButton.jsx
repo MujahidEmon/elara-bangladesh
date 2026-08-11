@@ -1,38 +1,75 @@
-import { getCartProducts } from "@/services/LocalStorage";
+"use client";
+
+import useLocalCart from "@/services/useLocalCart";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 
 
-
 const CartButton = ({ compact = false }) => {
+    const {cartProducts} = useLocalCart();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Server + first client render must be identical
+  if (!mounted) {
     if (compact) {
-        return (
-            <span className="relative inline-flex">
-                <FiShoppingCart size={28} />
-            </span>
-        );
+      return (
+        <span className="relative inline-flex">
+          <FiShoppingCart size={28} />
+        </span>
+      );
     }
-    // const cartProducts = getCartProducts();
-    // console.log(cartProducts);
 
     return (
-        <Link
-            href="/cart"
-            className="group flex flex-col items-center gap-1 text-slate-950 transition hover:text-[#fcab35]"
-            aria-label="View cart"
-        >
-            <span className="relative">
-                <FiShoppingCart
-                    size={27}
-                    strokeWidth={1.75}
-                />
-            </span>
-
-            <span className="text-sm font-medium leading-none">
-                Cart
-            </span>
-        </Link>
+      <Link
+        href="/cart"
+        className="relative inline-flex"
+        aria-label="View cart"
+      >
+        <FiShoppingCart size={28} />
+      </Link>
     );
+  }
+
+  const cartCount = cartProducts?.reduce(
+    (total, item) => total + Number(item?.quantity || 1),
+    0
+  );
+
+  if (compact) {
+    return (
+      <span className="relative inline-flex">
+        <FiShoppingCart size={28} />
+
+        {cartCount > 0 && (
+          <span className="absolute -right-2 -top-2 min-w-5 rounded-full bg-[#FCAB35] px-1 text-center text-xs font-bold text-white">
+            {cartCount}
+          </span>
+        )}
+      </span>
+    );
+  }
+
+  return (
+    <Link
+      href="/cart"
+      className="relative inline-flex"
+      aria-label="View cart"
+    >
+      <FiShoppingCart size={28} />
+
+      {cartCount > 0 && (
+        <span className="absolute -right-2 -top-2 min-w-5 rounded-full bg-[#FCAB35] px-1 text-center text-xs font-bold text-white">
+          {cartCount}
+        </span>
+      )}
+    </Link>
+  );
 };
 
 export default CartButton;

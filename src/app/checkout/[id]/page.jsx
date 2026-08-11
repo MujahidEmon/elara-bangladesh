@@ -6,7 +6,6 @@ export default async function CheckoutPage({ params }) {
 
     const { id } = await params;
 
-    console.log(id);
 
     const product = await getProductById(id);
 

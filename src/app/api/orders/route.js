@@ -10,7 +10,7 @@ export const POST = async (request) => {
   try {
     const order = await request.json();
     const { name, phone, address, productDetails } = order;
-    console.log("order", order);
+    // console.log("order", order);
 
     // if (!name || !phone || !address || !productDetails?.productId) {
     //   return Response.json(

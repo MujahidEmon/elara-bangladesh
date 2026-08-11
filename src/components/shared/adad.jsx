@@ -70,7 +70,6 @@ const adda = () => {
   const trimmedSearch = searchTerm.trim();
   const shouldShowSuggestions = isSearchFocused && trimmedSearch.length > 0;
 
-  console.log(pathname);
 
   const href = usePathname();
   const act =
