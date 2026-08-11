@@ -1,66 +1,90 @@
-  "use client";
+"use client";
 
-  import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-  import {
-    getCartProducts,
-    saveToCart,
-    deleteFromCart,
-    incrementFromCart,
-    decrementFromCart,
-  } from "./LocalStorage";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getCartProducts,
+  saveToCart,
+  deleteFromCart,
+  incrementFromCart,
+  decrementFromCart,
+} from "./LocalStorage";
+import { useCartAnimation } from "@/components/cart/CartAnimationProvider";
 
-  const useLocalCart = () => {
-    const queryClient = useQueryClient();
+const useLocalCart = () => {
+  const { openCartSlider } = useCartAnimation();
+  const queryClient = useQueryClient();
 
-    // load cart products
-    const { data: cartProducts = [] } = useQuery({
-      queryKey: ["cart"],
-      queryFn: getCartProducts,
-    });
+  // Load cart products
+  const { data: cartProducts = [] } = useQuery({
+    queryKey: ["cart"],
+    queryFn: getCartProducts,
+  });
 
+  // Add to cart
+  const addMutation = useMutation({
+    mutationFn: saveToCart,
 
-    // add to cart
-    const addMutation = useMutation({
-      mutationFn: saveToCart,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["cart"]);
-      },
-    });
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
 
+      openCartSlider();
+    },
+  });
 
-    // delete from cart
-    const deleteMutation = useMutation({
-      mutationFn: deleteFromCart,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["cart"]);
-      },
-    });
+  // Delete from cart
+  const deleteMutation = useMutation({
+    mutationFn: deleteFromCart,
 
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
+    },
+  });
 
-    // increment quantity
-    const incMutation = useMutation({
-      mutationFn: incrementFromCart,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["cart"]);
-      },
-    });
+  // Increment quantity
+  const incMutation = useMutation({
+    mutationFn: incrementFromCart,
 
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
+    },
+  });
 
-    // decrement quantity
-    const decMutation = useMutation({
-      mutationFn: decrementFromCart,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["cart"]);
-      },
-    });
+  // Decrement quantity
+  const decMutation = useMutation({
+    mutationFn: decrementFromCart,
 
-    return {
-      cartProducts,
-      handleAddToCart: (product) => addMutation.mutate(product),
-      handleDeleteFromLs: (product) => deleteMutation.mutate(product  ),
-      handleIncreaseLs: (id) => incMutation.mutate(id),
-      handleDecreaseLs: (id) => decMutation.mutate(id),
-    };
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
+    },
+  });
+
+  return {
+    cartProducts,
+
+    handleAddToCart: (product) => {
+      addMutation.mutate(product);
+    },
+
+    handleDeleteFromLs: (product) => {
+      deleteMutation.mutate(product);
+    },
+
+    handleIncreaseLs: (id) => {
+      incMutation.mutate(id);
+    },
+
+    handleDecreaseLs: (id) => {
+      decMutation.mutate(id);
+    },
   };
+};
 
-  export default useLocalCart;
+export default useLocalCart;

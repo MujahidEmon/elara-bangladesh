@@ -97,9 +97,9 @@ export default function CheckoutForm({ product }) {
             <section className="">
                 <form
                     onSubmit={handlePlaceOrder}
-                    className=" mx-auto max-w-7xl px-6 sm:px-10 py-6"
+                    className=" mx-auto max-w-7xl  sm:px-4 py-6"
                 >
-                    <div className="rounded-2xl bg-[#c2ffe1] bg-opacity-70 backdrop-blur-md shadow-lg p-8 sm:p-12">
+                    <div className="rounded-2xl bg-[#c2ffe1] bg-opacity-70 backdrop-blur-md shadow-lg p-4 sm:p-12">
                         <h1 className="text-center text-black text-2xl md:text-4xl font-bold mb-8">
                             Checkout
                         </h1>
