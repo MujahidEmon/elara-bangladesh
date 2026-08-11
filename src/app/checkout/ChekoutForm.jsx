@@ -3,8 +3,10 @@
 import useLocalCart from "@/services/useLocalCart";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import CheckoutSkeleton from "./CheckoutSkeleton";
 
 export default function CheckoutForm() {
   const { cartProducts } = useLocalCart();
@@ -190,11 +192,7 @@ export default function CheckoutForm() {
 
   if (!mounted) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-gray-500">
-          Loading checkout...
-        </p>
-      </div>
+      <CheckoutSkeleton></CheckoutSkeleton>
     );
   }
 
@@ -441,15 +439,17 @@ export default function CheckoutForm() {
                       >
                         {/* Product Image */}
 
-                        <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                        <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
                           {item?.image ? (
-                            <img
+                            <Image
                               src={item.image}
                               alt={
                                 item?.productName ||
                                 item?.name ||
                                 "Product"
                               }
+                              width={64}
+                              height={64}
                               className="h-full w-full object-cover"
                             />
                           ) : (
@@ -462,7 +462,7 @@ export default function CheckoutForm() {
                         {/* Product Info */}
 
                         <div className="min-w-0 flex-1">
-                          <p className="line-clamp-2 font-semibold">
+                          <p className="line-clamp-2 ">
                             {item?.productName ||
                               item?.name ||
                               item?.title ||
