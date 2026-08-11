@@ -75,7 +75,8 @@ const SearchSuggestions = ({
 
   return (
     <div
-      className={`absolute left-0 right-0 top-[calc(100%+8px)] z-[70] overflow-hidden rounded-xl border border-slate-100 bg-white text-slate-900 shadow-2xl ${
+      onMouseDown={(event) => event.preventDefault()}
+      className={`absolute left-0 right-0 top-[calc(100%+8px)] z-50 overflow-hidden rounded-xl border border-slate-100 bg-white text-slate-900 shadow-2xl ${
         compact
           ? "max-h-[360px]"
           : "max-h-[430px]"
@@ -133,7 +134,7 @@ const SearchSuggestions = ({
       ) : (
         <div className="px-4 py-5">
           <p className="text-sm font-semibold text-slate-700">
-            No products found for "{searchTerm}".
+            No products found for &quot;{searchTerm}&quot;.
           </p>
 
           <Link

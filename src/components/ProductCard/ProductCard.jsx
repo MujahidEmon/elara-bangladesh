@@ -15,7 +15,6 @@ const NewProductCard = ({ product }) => {
     _id,
     gallery
   } = product;
-  console.log(gallery);
 
   const { handleAddToCart } = useLocalCart();
   const { openCartSlider } = useCartAnimation();
@@ -70,6 +69,7 @@ const NewProductCard = ({ product }) => {
               width={200}
               src={image}
               alt={productName}
+              sizes="(min-width: 768px) 25vw, 50vw"
               className={
                 gallery?.length
                   ? "object-contain"
@@ -85,6 +85,7 @@ const NewProductCard = ({ product }) => {
                 width={200}
                 src={img}
                 alt={`${productName} ${index + 2}`}
+                sizes="(min-width: 768px) 25vw, 50vw"
               />
             ))}
           </figure>

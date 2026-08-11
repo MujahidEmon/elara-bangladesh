@@ -2,35 +2,74 @@
 
 import Link from "next/link";
 import { FiChevronDown } from "react-icons/fi";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const NavigationLinks = ({ categories }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const visibleCategories = categories.slice(0, 11);
 
   const isActive = (href) => {
+    // Home
     if (href === "/") {
       return pathname === "/";
     }
 
-    if (href.startsWith("/products?")) {
-      return pathname === "/products";
+    const [hrefPath, hrefQuery] = href.split("?");
+
+    // Path must match
+    if (pathname !== hrefPath) {
+      return false;
     }
 
-    return pathname.startsWith(href);
+    // All Products
+    // /products হলে active
+    // কিন্তু /products?search=... হলে active হবে না
+    if (href === "/products") {
+      return searchParams.toString() === "";
+    }
+
+    // Category URL-এর query parameters
+    if (hrefQuery) {
+      const hrefParams = new URLSearchParams(hrefQuery);
+
+      for (const [key, value] of hrefParams.entries()) {
+        if (searchParams.get(key) !== value) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
   };
+
+  const inactiveClass =
+    "relative inline-flex items-center shrink-0 " +
+    "text-white px-4 py-1 " +
+    "transition-colors duration-300 " +
+    "hover:text-black/60 " +
+    "after:absolute after:bottom-[-1] after:left-0 " +
+    "after:h-[2px] after:w-0 " +
+    "after:bg-white " +
+    "hover:after:w-full " +
+    "after:transition-all after:duration-300";
+
+  const activeClass =
+    "relative inline-flex items-center shrink-0 " +
+    "text-black px-4 py-1 " +
+    " " +
+    "border-b-2 border-white " +
+    "bg-white/15";
 
   return (
     <>
       {/* Home */}
       <Link
         href="/"
-        className={`inline-flex shrink-0 items-center gap-1.5 text-base transition hover:text-black ${
-          isActive("/")
-            ? "font-semibold text-black"
-            : "text-white"
-        }`}
+        className={isActive("/") ? activeClass : inactiveClass}
       >
         Home
       </Link>
@@ -38,11 +77,11 @@ const NavigationLinks = ({ categories }) => {
       {/* All Products */}
       <Link
         href="/products"
-        className={`inline-flex shrink-0 items-center gap-1.5 text-base transition hover:text-black ${
+        className={
           isActive("/products")
-            ? "font-semibold text-black"
-            : "text-white"
-        }`}
+            ? activeClass
+            : inactiveClass
+        }
       >
         All Products
       </Link>
@@ -52,11 +91,11 @@ const NavigationLinks = ({ categories }) => {
         <Link
           key={category.name}
           href={category.href}
-          className={`inline-flex shrink-0 items-center gap-1.5 text-base transition hover:text-black ${
+          className={
             isActive(category.href)
-              ? "font-semibold text-black"
-              : "text-white"
-          }`}
+              ? activeClass
+              : inactiveClass
+          }
         >
           {category.name}
 
@@ -64,6 +103,7 @@ const NavigationLinks = ({ categories }) => {
             <FiChevronDown
               size={17}
               strokeWidth={2.2}
+              className="ml-1.5"
             />
           )}
         </Link>

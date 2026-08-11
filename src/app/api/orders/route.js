@@ -10,13 +10,14 @@ export const POST = async (request) => {
   try {
     const order = await request.json();
     const { name, phone, address, productDetails } = order;
+    console.log("order", order);
 
-    if (!name || !phone || !address || !productDetails?.productId) {
-      return Response.json(
-        { message: "Name, phone, address, and product are required" },
-        { status: 400 }
-      );
-    }
+    // if (!name || !phone || !address || !productDetails?.productId) {
+    //   return Response.json(
+    //     { message: "Name, phone, address, and product are required" },
+    //     { status: 400 }
+    //   );
+    // }
 
     const db = await connectDB();
     const ordersCollection = db.collection("orders");

@@ -1,5 +1,7 @@
+import { getCartProducts } from "@/services/LocalStorage";
 import Link from "next/link";
 import { FiShoppingCart } from "react-icons/fi";
+
 
 
 const CartButton = ({ compact = false }) => {
@@ -10,6 +12,8 @@ const CartButton = ({ compact = false }) => {
             </span>
         );
     }
+    // const cartProducts = getCartProducts();
+    // console.log(cartProducts);
 
     return (
         <Link

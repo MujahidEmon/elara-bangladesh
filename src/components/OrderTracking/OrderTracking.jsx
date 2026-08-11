@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FiAlertCircle, FiCheckCircle, FiPackage, FiSearch, FiTruck } from "react-icons/fi";
 
 const steps = [
@@ -14,10 +14,13 @@ const steps = [
 
 const statusIndex = {
   pending: 0,
+  confirmed: 1,
   processing: 1,
   shipped: 2,
   delivered: 3,
 };
+
+const normalizeStatus = (status = "") => status.toLowerCase().trim();
 
 const getProductName = (order) =>
   order?.productDetails?.productName || order?.productDetails?.name || order?.productDetails?.title || "Product";
@@ -29,7 +32,7 @@ const OrderTracking = ({ initialOrderNumber = "" }) => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const trackOrder = async (value = orderNumber) => {
+  const trackOrder = useCallback(async (value) => {
     const query = value.trim();
 
     if (!query) {
@@ -50,15 +53,16 @@ const OrderTracking = ({ initialOrderNumber = "" }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     if (initialOrderNumber) {
       trackOrder(initialOrderNumber);
     }
-  }, [initialOrderNumber]);
+  }, [initialOrderNumber, trackOrder]);
 
-  const currentStep = statusIndex[order?.status] ?? 0;
+  const orderStatus = normalizeStatus(order?.status);
+  const currentStep = statusIndex[orderStatus] ?? 0;
 
   return (
     <main className="min-h-[70vh] bg-[#f6f8fb]">
@@ -73,7 +77,7 @@ const OrderTracking = ({ initialOrderNumber = "" }) => {
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              trackOrder();
+              trackOrder(orderNumber);
             }}
             className="flex flex-col gap-3 sm:flex-row"
           >
@@ -108,7 +112,7 @@ const OrderTracking = ({ initialOrderNumber = "" }) => {
                 <h2 className="mt-1 text-2xl font-extrabold text-slate-950">{order.orderNumber}</h2>
               </div>
               <span className="rounded-full bg-[#fff7ea] px-4 py-2 text-sm font-bold capitalize text-[#FCAB35]">
-                {order.status}
+                {orderStatus === "confirmed" ? "processing" : orderStatus}
               </span>
             </div>
 

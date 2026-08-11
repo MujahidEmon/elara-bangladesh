@@ -22,7 +22,7 @@ const Navbar = async () => {
   return (
     <header className="bg-white shadow-sm">
       {/* ================= DESKTOP TOP BAR ================= */}
-      <div className="sticky top-0 z-50 bg-white">
+      <div className="sticky top-0  bg-white">
         <div className="mx-auto hidden max-w-7xl items-center gap-8 px-4 py-3 lg:flex">
           
           {/* Logo */}
