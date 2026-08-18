@@ -143,11 +143,11 @@ const MobileMenu = ({ categories }) => {
               />
 
               {/* Help */}
-              <p className="mt-5 text-sm font-bold uppercase text-gray-400">
+              {/* <p className="mt-5 text-sm font-bold uppercase text-gray-400">
                 Help Link
-              </p>
+              </p> */}
 
-              <div className="mt-3 space-y-3">
+              {/* <div className="mt-3 space-y-3">
                 <Link
                   href="/products?search=offer"
                   onClick={() =>
@@ -168,7 +168,7 @@ const MobileMenu = ({ categories }) => {
                 >
                   Cart
                 </Link>
-              </div>
+              </div> */}
             </div>
           </aside>
         </div>
