@@ -28,17 +28,12 @@ export default function CheckoutForm() {
     ...districts,
   ];
 
-  // ==========================================
-  // Hydration
-  // ==========================================
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // ==========================================
   // Calculate subtotal
-  // ==========================================
 
   const subtotal = cartProducts.reduce((total, item) => {
     const price = Number(item?.price || 0);
@@ -47,22 +42,17 @@ export default function CheckoutForm() {
     return total + price * quantity;
   }, 0);
 
-  // ==========================================
   // Shipping
-  // ==========================================
 
   const shippingCharge =
-    district?.name === "Dhaka City" ? 70 : 130;
+    district?.name === "Dhaka City" ? 80 : 130;
 
-  // ==========================================
   // Final total
-  // ==========================================
 
   const totalPrice = subtotal + shippingCharge;
 
-  // ==========================================
   // Fetch districts
-  // ==========================================
+
 
   useEffect(() => {
     fetch("https://bdopenapi.vercel.app/api/geo/districts")
@@ -76,9 +66,7 @@ export default function CheckoutForm() {
       });
   }, []);
 
-  // ==========================================
   // Fetch upazilas
-  // ==========================================
 
   useEffect(() => {
     if (district?.id === 0) {
@@ -109,9 +97,7 @@ export default function CheckoutForm() {
     }
   }, [district?.id]);
 
-  // ==========================================
   // Place order
-  // ==========================================
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -178,17 +164,12 @@ export default function CheckoutForm() {
 
       toast.error(
         error?.response?.data?.message ||
-          "Failed to place order"
+        "Failed to place order"
       );
     } finally {
       setIsPlacingOrder(false);
     }
   };
-
-  // ==========================================
-  // IMPORTANT:
-  // Don't render different HTML before hydration
-  // ==========================================
 
   if (!mounted) {
     return (
@@ -196,9 +177,7 @@ export default function CheckoutForm() {
     );
   }
 
-  // ==========================================
   // Empty cart
-  // ==========================================
 
   if (!cartProducts?.length) {
     return (
@@ -223,10 +202,6 @@ export default function CheckoutForm() {
     );
   }
 
-  // ==========================================
-  // Checkout UI
-  // ==========================================
-
   return (
     <div>
       <section>
@@ -235,18 +210,15 @@ export default function CheckoutForm() {
           className="mx-auto max-w-7xl overflow-y-hidden py-6 sm:px-10"
         >
           <div className="rounded-2xl bg-[#c2ffe1] bg-opacity-70 md:p-8 p-4  shadow-lg backdrop-blur-md sm:p-12">
-            {/* ==================================
-                Heading
-            ================================== */}
+
 
             <h1 className="mb-8 text-center text-2xl font-bold text-black md:text-4xl">
               Checkout
             </h1>
 
             <div className="flex flex-col gap-12 lg:flex-row">
-              {/* ==================================
-                  LEFT SIDE
-              ================================== */}
+
+              {/* LEFT SIDE */}
 
               <div className="flex-1 space-y-8 text-gray-950">
                 <div>
@@ -368,11 +340,10 @@ export default function CheckoutForm() {
                             selected || null
                           );
                         }}
-                        className={`w-full rounded-lg bg-white px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-[#FCAB35] ${
-                          district?.name
+                        className={`w-full rounded-lg bg-white px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-[#FCAB35] ${district?.name
                             ? "text-gray-950"
                             : "text-gray-400"
-                        }`}
+                          }`}
                       >
                         <option value="">
                           Select your Thana/Upozila
@@ -637,8 +608,8 @@ export default function CheckoutForm() {
                   {Array.isArray(
                     completedOrder.productDetails
                   ) &&
-                  completedOrder.productDetails
-                    .length !== 1
+                    completedOrder.productDetails
+                      .length !== 1
                     ? "s"
                     : ""}
                 </span>

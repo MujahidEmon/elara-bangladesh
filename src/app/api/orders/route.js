@@ -1,9 +1,14 @@
 import { connectDB } from "@/lib/connectDB";
 
 const generateOrderNumber = () => {
-  const timestamp = Date.now().toString();
-  const random = Math.floor(1000 + Math.random() * 9000).toString();
-  return `${timestamp}${random}`;
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+  return `ELBD${year}${month}${random}`;
 };
 
 export const POST = async (request) => {
